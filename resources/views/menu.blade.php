@@ -13,6 +13,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/css/menu.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/menu.css') }}">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
@@ -29,13 +30,16 @@
                 <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim"
                     style="font-size: 28px;">restaurant_menu</span>
                 <h1 class="font-headline-xl text-headline-xl text-primary dark:text-primary-fixed-dim tracking-tight">
-                    Sabor y Brasa</h1>
+                    Ch'Tacos</h1>
             </div>
             <div class="flex items-center gap-4">
+                <h2 class="text-xl font-bold text-gray-900 drop-shadow-sm">
+                    {{ auth()->user()->name ?? 'Invitado' }}
+                </h2>
                 <div
                     class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
                     <img class="w-full h-full object-cover" alt="Mesero Sabor y Brasa"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYK3d9YK3-yQ-CiV3aNPMwK6UBcW_tU7M2ZspV5QR_uMbwb6kR_T4LDRZZDvm7IGA4Eu1gShE-Xg8O5nD4hPpreI2syJ4z8kPn8z65oZncFmI6Fda7K8w03R5s6Fm81MQUxyCH15eYg9mKFCtqyR_g8R2RHbZaP9fJfXJYqcN6mWe1s6KRbC3YXNWniU3xjVdQ0ncadVyq12ZjnHSfYsd2iIoITl-K4hv9cZnqtHSyAje0LZh47ewtSw" />
+                        src="{{ asset('assets/img/loading.jpg') }}" />
                 </div>
             </div>
         </div>
@@ -49,9 +53,9 @@
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
                 <div class="relative z-20 h-full flex flex-col justify-center p-md text-white max-w-lg">
-                    <h2 class="font-headline-xl text-headline-xl mb-xs">El auténtico sabor del fogón.</h2>
+                    <h2 class="font-headline-xl text-headline-xl mb-xs">El auténtico sabor </h2>
                     <p class="font-body-lg text-body-lg text-primary-fixed opacity-90">Ingredientes frescos, recetas
-                        tradicionales y el toque de Sabor y Brasa.</p>
+                        tradicionales</p>
                 </div>
             </div>
         </section>
@@ -66,24 +70,22 @@
             </div>
         </section>
 
-        <section
+        <section id="category-filters"
             class="px-margin-mobile md:px-margin-desktop mb-md overflow-x-auto hide-scrollbar whitespace-nowrap flex gap-sm max-w-screen-xl mx-auto">
-            <button
+            <button data-category="todos"
                 class="active-tab px-gutter py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-md">Todos</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Tacos</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Alambres</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Volcanes</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Gringas</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Sincronizadas</button>
-            <button
-                class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors">Bebidas</button>
-        </section>
+            @foreach ($categories as $category)
+                @php
+                    $categoryName = $category->category ?? 'Categoría Eliminada';
+                @endphp
 
+                <button data-category="{{ str($categoryName)->slug() }}"
+                    class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors min-w-max">
+                    {{ $categoryName }}
+                </button>
+            @endforeach
+
+        </section>
         <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-lg px-margin-mobile md:px-margin-desktop">
             <div
                 class="w-full mb-md flex flex-col sm:flex-row gap-md bg-surface-container-low p-md rounded-xl border border-outline-variant">
@@ -91,7 +93,7 @@
                     <label class="block font-label-lg text-label-lg text-on-surface-variant mb-xs">Mesa</label>
                     <div class="relative">
                         <select
-                            class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-4 font-body-md focus:ring-2 focus:ring-primary appearance-none">
+                            class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-6 font-body-md focus:ring-2 focus:ring-primary appearance-none">
                             <option>Mesa 1</option>
                             <option>Mesa 2</option>
                             <option>Mesa 3</option>
@@ -100,399 +102,79 @@
                             class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
                     </div>
                 </div>
-                <div class="flex-grow">
-                    <label class="block font-label-lg text-label-lg text-on-surface-variant mb-xs">Agrega al
-                        Usuario</label>
-                    <input
-                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-4 font-body-md focus:ring-2 focus:ring-primary"
-                        placeholder="Nombre o # de comensal" type="text">
+                <div class="relative w-full max-w-md mx-auto" id="user-search-container">
+                    <label for="user-search-input" class="block text-sm font-medium text-on-surface-variant mb-2">
+                        Selecciona por defecto o agrega usuario
+                    </label>
+
+                    <div class="relative">
+                        <input type="text" id="user-search-input"
+                            placeholder="Buscar, escribir nombre o seleccionar tipo..."
+                            class="w-full px-4 py-2 border border-outline rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                            autocomplete="off">
+
+                        <span
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-on-surface-variant">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <ul id="user-dropdown-list"
+                        class="absolute z-10 w-full mt-1 bg-surface-container border border-outline rounded-lg shadow-lg max-h-65 overflow-y-auto hidden">
+                    </ul>
+
+                    <input type="hidden" name="user_id" id="selected-user-id" value="">
+                    <input type="hidden" name="user_identifier" id="selected-user-identifier" value="">
+                    <input type="hidden" name="create_new_user" id="create-new-user" value="0">
                 </div>
             </div>
 
-            <section class="flex-grow">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
+            @foreach ($products as $product)
+                @php
+                    $productCategory = $product->category ?? 'categoria-eliminada';
+                @endphp
+
+                <div class="product-card" data-category="{{ str($productCategory)->slug() }}">
                     <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
+                        class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-all duration-300 active:scale-[0.98] cursor-pointer flex flex-col h-[380px] border border-outline/10">
+
+                        <div class="h-[160px] w-full overflow-hidden relative bg-surface-container-high">
                             <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Alambre Especial" src="{{ asset('assets/img/loading.jpg') }}">
+                                src="{{ $product->imagen_ruta ? asset($product->imagen_ruta) : asset('assets/img/loading.jpg') }}"
+                                alt="{{ $product->name }}">
                         </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Alambre Especial</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Res, tocino,
-                                pimiento, cebolla y quesillo fundido de alta calidad.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$160.00</span>
+
+                        <div class="p-sm flex flex-col justify-between flex-grow">
+
+                            <div>
+                                <h3 class="font-headline-md text-headline-md text-on-surface truncate">
+                                    {{ $product->name }}</h3>
+                                <p
+                                    class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mt-xs leading-relaxed">
+                                    {{ $product->description ?? 'Sin descripción disponible.' }}
+                                </p>
+                            </div>
+
+                            <div class="flex justify-between items-center mt-sm pt-xs border-t border-outline/5">
+                                <span class="font-price-display text-price-display text-secondary font-bold text-xl">
+                                    ${{ number_format($product->price, 2) }}
+                                </span>
+
                                 <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
+                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
+                                    data-action="add-to-cart" data-id="{{ $product->id }}">
+                                    <span class="material-symbols-outlined text-xl">add</span>
                                 </button>
                             </div>
-                        </div>
-                    </div>
 
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Tacos al Pastor" src="{{ asset('assets/img/loading.jpg') }}">
                         </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos al Pastor</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Orden de 3
-                                tacos con piña, cilantro y cebolla recién cortados.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Tacos al Pastor" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos de Bistc</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Orden de 3
-                                tacos de bistec, cilantro y cebolla recién cortados.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Tacos al Pastor" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos de Suadero</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Orden de 3
-                                tacos de Suadero, cilantro y cebolla recién cortados.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Tacos al Pastor" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos de Longaniza</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Orden de 3
-                                tacos de Longaniza, cilantro y cebolla recién cortados.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Tacos al Pastor" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos de Campechano</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Orden de 3
-                                tacos de campechano, cilantro y cebolla recién cortados.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Volcan de Chorizo" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Volcan de Pastor</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla
-                                dorada al comal con Pastor y costra de queso.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Volcan de Chorizo" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Volcan de Bistec</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla
-                                dorada al comal con Bistec y costra de queso.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Volcan de Chorizo" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Volcan de Suadero</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla
-                                dorada al comal con Suadero y costra de queso.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Volcan de Chorizo" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Volcan de Longaniza</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla
-                                dorada al comal con Longaniza y costra de queso.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Volcan de Chorizo" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Volcan de Campechano</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla
-                                dorada al comal con Campechano y costra de queso.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$45.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Gringa Especial" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Gringa Pastor</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla de
-                                harina con pastor y extra queso fundido.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$95.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Gringa Especial" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Sincronizada Bistec</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla de
-                                harina con bistec y extra queso fundido.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$95.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Gringa Especial" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Gringa Suadero</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla de
-                                harina con Suadero y extra queso fundido.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$95.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Gringa Especial" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Gringa Longaniza</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla de
-                                harina con Longaniza y extra queso fundido.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$95.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Gringa Especial" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Gringa Campechano</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Tortilla de
-                                harina con Campechano y extra queso fundido.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$95.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Refresco" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Refresco 600ml</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Variedad de
-                                sabores clásicos bien fríos para acompañar.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$35.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-transform active:scale-95 duration-200 cursor-pointer">
-                        <div class="h-40 overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                alt="Sincronizada" src="{{ asset('assets/img/loading.jpg') }}">
-                        </div>
-                        <div class="p-sm relative">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Sincronizada Gigante</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-xs">Jamón
-                                premium y mezcla de quesos en tortilla de harina.</p>
-                            <div class="flex justify-between items-end mt-md">
-                                <span class="font-price-display text-price-display text-secondary">$70.00</span>
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors"
-                                    data-action="add-to-cart">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </section>
-
+            @endforeach
             <aside class="hidden lg:block">
                 <div
                     class="sticky top-24 bg-surface-container rounded-xl p-md shadow-sm border border-outline-variant">
@@ -568,6 +250,7 @@
     </nav>
 
     <script defer src="{{ asset('assets/js/tallwind-config.js') }}"></script>
+    <script src="{{ asset('assets/js/menu.js') }}"></script>
 </body>
 
 </html>
