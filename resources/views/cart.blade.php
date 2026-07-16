@@ -19,17 +19,26 @@
 <body class="bg-surface text-on-surface min-h-screen pb-24">
 
     <header
-        class="bg-surface dark:bg-surface-dim flex justify-between items-center px-margin-mobile h-16 w-full max-w-screen-xl mx-auto sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim"
-                data-icon="restaurant_menu">restaurant_menu</span>
-            <h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Sabor y
-                Brasa</h1>
+        class="w-full top-0 sticky z-50 bg-background dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-19">
+        <div
+            class="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-full w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim"
+                    style="font-size: 28px;">restaurant_menu</span>
+                <h1 class="font-headline-xl text-headline-xl text-primary dark:text-primary-fixed-dim tracking-tight">
+                    Ch'Tacos</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl font-bold text-gray-900 drop-shadow-sm">
+                    {{ auth()->user()->name ?? 'Invitado' }}
+                </h2>
+                <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
+                    <img class="w-full h-full object-cover" alt="Mesero Sabor y Brasa"
+                        src="{{ asset('assets/img/loading.jpg') }}" />
+                </div>
+            </div>
         </div>
-        <button
-            class="text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 active:scale-95 transition-transform">
-            <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-        </button>
     </header>
 
     <main

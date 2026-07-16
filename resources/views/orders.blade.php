@@ -22,23 +22,23 @@
 <body class="bg-background text-on-background min-h-screen pb-32">
 
     <header
-        class="w-full top-0 sticky z-50 bg-background dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-16">
+        class="w-full top-0 sticky z-50 bg-background dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-19">
         <div
             class="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-full w-full max-w-7xl mx-auto">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim"
                     style="font-size: 28px;">restaurant_menu</span>
                 <h1 class="font-headline-xl text-headline-xl text-primary dark:text-primary-fixed-dim tracking-tight">
-                    Sabor y Brasa</h1>
+                    Ch'Tacos</h1>
             </div>
             <div class="flex items-center gap-4">
-                <button class="hover:bg-surface-container-high transition-colors p-2 rounded-full">
-                    <span class="material-symbols-outlined text-on-surface-variant">search</span>
-                </button>
+                <h2 class="text-xl font-bold text-gray-900 drop-shadow-sm">
+                    {{ auth()->user()->name ?? 'Invitado' }}
+                </h2>
                 <div
                     class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
                     <img class="w-full h-full object-cover" alt="Mesero Sabor y Brasa"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYK3d9YK3-yQ-CiV3aNPMwK6UBcW_tU7M2ZspV5QR_uMbwb6kR_T4LDRZZDvm7IGA4Eu1gShE-Xg8O5nD4hPpreI2syJ4z8kPn8z65oZncFmI6Fda7K8w03R5s6Fm81MQUxyCH15eYg9mKFCtqyR_g8R2RHbZaP9fJfXJYqcN6mWe1s6KRbC3YXNWniU3xjVdQ0ncadVyq12ZjnHSfYsd2iIoITl-K4hv9cZnqtHSyAje0LZh47ewtSw" />
+                        src="{{ asset('assets/img/loading.jpg') }}" />
                 </div>
             </div>
         </div>
