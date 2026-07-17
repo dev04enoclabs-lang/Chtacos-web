@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
-    public function index()
-    {
-        $categories = DB::table('menu')
-        ->select('category')
-        ->distinct()
-        ->get();
+public function index()
+{
+    $categories = Category::all();
+    $products = Menu::with('categoria')->get();
 
-        $products = DB::table('menu')->get();
+    // dd($products); 
 
-        return view('menu', compact('categories', 'products'));
-    }
+    return view('menu', compact('categories', 'products'));
+}
 }

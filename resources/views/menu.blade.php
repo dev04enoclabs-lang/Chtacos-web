@@ -21,7 +21,6 @@
 
 <body class="font-body-md text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
 
-    <!-- TopAppBar -->
     <header
         class="w-full top-0 sticky z-50 bg-background dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-19">
         <div
@@ -60,7 +59,7 @@
             </div>
         </section>
 
-        <section class="px-margin-mobile md:px-margin-desktop mb-md max-w-screen-xl mx-auto">
+        {{-- <section class="px-margin-mobile md:px-margin-desktop mb-md max-w-screen-xl mx-auto">
             <div class="relative flex items-center group">
                 <span
                     class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-secondary">search</span>
@@ -68,30 +67,14 @@
                     class="w-full bg-surface-container-low border-none rounded-full py-4 pl-12 pr-4 focus:ring-2 focus:ring-secondary-container font-body-md transition-all shadow-sm"
                     placeholder="¿Qué se te antoja hoy?" type="text">
             </div>
-        </section>
+        </section> --}}
 
-        <section id="category-filters"
-            class="px-margin-mobile md:px-margin-desktop mb-md overflow-x-auto hide-scrollbar whitespace-nowrap flex gap-sm max-w-screen-xl mx-auto">
-            <button data-category="todos"
-                class="active-tab px-gutter py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-md">Todos</button>
-            @foreach ($categories as $category)
-                @php
-                    $categoryName = $category->category ?? 'Categoría Eliminada';
-                @endphp
+        <div class="flex flex-col items-center gap-2 mb-6 px-4 ">
 
-                <button data-category="{{ str($categoryName)->slug() }}"
-                    class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors min-w-max">
-                    {{ $categoryName }}
-                </button>
-            @endforeach
-
-        </section>
-        <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-lg px-margin-mobile md:px-margin-desktop">
-            <div
-                class="w-full mb-md flex flex-col sm:flex-row gap-md bg-surface-container-low p-md rounded-xl border border-outline-variant">
-                <div class="flex-grow">
-                    <label class="block font-label-lg text-label-lg text-on-surface-variant mb-xs">Mesa</label>
-                    <div class="relative">
+            <div class="flex flex-row justify-center gap-2 w-full">
+                <div class="flex flex-col">
+                    <label class="block font-label-lg text-label-lg text-on-surface-variant mb-2">Mesa</label>
+                    <div class="relative w-80">
                         <select
                             class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-6 font-body-md focus:ring-2 focus:ring-primary appearance-none">
                             <option>Mesa 1</option>
@@ -102,82 +85,99 @@
                             class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
                     </div>
                 </div>
-                <div class="relative w-full max-w-md mx-auto" id="user-search-container">
-                    <label for="user-search-input" class="block text-sm font-medium text-on-surface-variant mb-2">
-                        Selecciona por defecto o agrega usuario
-                    </label>
 
+                <div class="relative w-80" id="user-search-container">
+                    <label for="user-search-input"
+                        class="block font-label-lg text-label-lg text-on-surface-variant mb-2">Usuario</label>
                     <div class="relative">
-                        <input type="text" id="user-search-input"
-                            placeholder="Buscar, escribir nombre o seleccionar tipo..."
-                            class="w-full px-4 py-2 border border-outline rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            autocomplete="off">
-
-                        <span
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-on-surface-variant">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </span>
+                        <input type="text" id="user-search-input" placeholder="Buscar nombre..."
+                            class="w-full px-4 py-2 border border-outline rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary transition-all">
                     </div>
-
-                    <ul id="user-dropdown-list"
-                        class="absolute z-10 w-full mt-1 bg-surface-container border border-outline rounded-lg shadow-lg max-h-65 overflow-y-auto hidden">
-                    </ul>
-
-                    <input type="hidden" name="user_id" id="selected-user-id" value="">
-                    <input type="hidden" name="user_identifier" id="selected-user-identifier" value="">
-                    <input type="hidden" name="create_new_user" id="create-new-user" value="0">
                 </div>
             </div>
 
-            @foreach ($products as $product)
-                @php
-                    $productCategory = $product->category ?? 'categoria-eliminada';
-                @endphp
-
-                <div class="product-card" data-category="{{ str($productCategory)->slug() }}">
-                    <div
-                        class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-all duration-300 active:scale-[0.98] cursor-pointer flex flex-col h-[380px] border border-outline/10">
-
-                        <div class="h-[160px] w-full overflow-hidden relative bg-surface-container-high">
-                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                src="{{ $product->imagen_ruta ? asset($product->imagen_ruta) : asset('assets/img/loading.jpg') }}"
-                                alt="{{ $product->name }}">
-                        </div>
-
-                        <div class="p-sm flex flex-col justify-between flex-grow">
-
-                            <div>
-                                <h3 class="font-headline-md text-headline-md text-on-surface truncate">
-                                    {{ $product->name }}</h3>
-                                <p
-                                    class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mt-xs leading-relaxed">
-                                    {{ $product->description ?? 'Sin descripción disponible.' }}
-                                </p>
-                            </div>
-
-                            <div class="flex justify-between items-center mt-sm pt-xs border-t border-outline/5">
-                                <span class="font-price-display text-price-display text-secondary font-bold text-xl">
-                                    ${{ number_format($product->price, 2) }}
-                                </span>
-
-                                <button
-                                    class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
-                                    data-action="add-to-cart" data-id="{{ $product->id }}">
-                                    <span class="material-symbols-outlined text-xl">add</span>
-                                </button>
-                            </div>
-
-                        </div>
-
-                    </div>
+            <div class="flex flex-col w-full items-center">
+                <label class="block font-label-lg text-label-lg text-on-surface-variant mb-2">Preparación</label>
+                <div class="relative w-80">
+                    <select
+                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-6 font-body-md focus:ring-2 focus:ring-primary appearance-none">
+                        <option value="0" disabled selected hidden>Selecciona la preparación</option>
+                        <option>Con Todo</option>
+                        <option>Natural(Sin Nada)</option>
+                        <option>C/Cebolla</option>
+                        <option>C/Cilantro</option>
+                        <option>C/Cebolla Asada</option>
+                    </select>
+                    <span
+                        class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
                 </div>
+            </div>
+
+        </div>
+
+        <section id="category-filters"
+            class="px-4 md:px-margin-desktop mb-md overflow-x-auto hide-scrollbar whitespace-nowrap flex gap-sm max-w-screen-xl mx-auto">
+            <button data-category="todos"
+                class="active-tab px-gutter py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-md">Todos</button>
+
+            @foreach ($categories as $category)
+                <button data-category="{{ str($category->category_name)->slug() }}"
+                    class="px-gutter py-2 rounded-full border border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-high transition-colors min-w-max">
+                    {{ $category->category_name }}
+                </button>
             @endforeach
-            <aside class="hidden lg:block">
-                <div
-                    class="sticky top-24 bg-surface-container rounded-xl p-md shadow-sm border border-outline-variant">
+        </section>
+
+        <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-lg px-margin-mobile md:px-margin-desktop">
+
+            <div class="max-w-screen-xl mx-auto px-margin-mobile md:px-margin-desktop py-md">
+                <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-4">
+
+                    @foreach ($products as $product)
+                        @php
+                            $catName = $product->categoria ? $product->categoria->category_name : 'sin-categoria';
+                        @endphp
+
+                        <div class="product-card" data-category="{{ \Illuminate\Support\Str::slug($catName) }}">
+                            <div
+                                class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-all duration-300 active:scale-[0.98] cursor-pointer flex flex-col h-[380px] border border-outline/10">
+
+                                <div class="h-[160px] w-full overflow-hidden relative bg-surface-container-high">
+                                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        src="{{ $product->imagen_ruta ? asset($product->imagen_ruta) : asset('assets/img/loading.jpg') }}"
+                                        alt="{{ $product->name }}">
+                                </div>
+
+                                <div class="p-sm flex flex-col justify-between flex-grow">
+                                    <div>
+                                        <h3 class="font-headline-md text-headline-md text-on-surface truncate">
+                                            {{ $product->name }}</h3>
+                                        <p
+                                            class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mt-xs leading-relaxed">
+                                            {{ $product->description ?? 'Sin descripción disponible.' }}
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="flex justify-between items-center mt-sm pt-xs border-t border-outline/5">
+                                        <span
+                                            class="font-price-display text-price-display text-secondary font-bold text-xl">
+                                            ${{ number_format($product->price, 2) }}
+                                        </span>
+                                        <button
+                                            class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
+                                            data-action="add-to-cart" data-id="{{ $product->id }}">
+                                            <span class="material-symbols-outlined text-xl">add</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <aside class="block">
+                <div class="sticky top-24 bg-surface-container rounded-xl p-md shadow-sm border border-outline-variant">
                     <div class="flex items-center gap-xs mb-md border-b border-outline-variant pb-xs">
                         <span class="material-symbols-outlined text-primary">receipt_long</span>
                         <h4 class="font-headline-md text-headline-md">Tu Orden</h4>
