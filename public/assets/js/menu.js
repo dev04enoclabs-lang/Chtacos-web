@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
     const buttons = document.querySelectorAll("#category-filters button");
     const products = document.querySelectorAll(".product-card");
+    const noProducto = document.getElementById("noProductId");
 
     buttons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -14,13 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     "active-tab",
                     "bg-primary",
                     "text-on-primary",
-                    "shadow-md"
+                    "shadow-md",
                 );
                 btn.classList.add(
                     "border",
                     "border-outline",
                     "text-on-surface-variant",
-                    "hover:bg-surface-container-high"
+                    "hover:bg-surface-container-high",
                 );
             });
 
@@ -28,14 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 "active-tab",
                 "bg-primary",
                 "text-on-primary",
-                "shadow-md"
+                "shadow-md",
             );
             button.classList.remove(
                 "border",
                 "border-outline",
                 "text-on-surface-variant",
-                "hover:bg-surface-container-high"
+                "hover:bg-surface-container-high",
             );
+            let visibleCount = 0;
 
             products.forEach((product) => {
                 const productCategory = product.getAttribute("data-category");
@@ -45,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     productCategory === selectedCategory
                 ) {
                     product.style.display = "block";
+                    visibleCount++;
                     setTimeout(() => {
                         product.style.opacity = "1";
                         product.style.transform = "scale(1)";
@@ -57,128 +60,219 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, 170);
                 }
             });
+
+            if (noProducto) {
+                if (visibleCount === 0) {
+                    noProducto.classList.remove("hidden");
+                } else {
+                    noProducto.classList.add("hidden");
+                }
+            }
         });
     });
 
     // ==========================================
-    // 2. SECCIÓN: BUSCADOR DE USUARIOS / PERFILES
+    // 2. SECCIÓN: CARRITO / MODAL DE PRODUCTOS Y SELECTORES
     // ==========================================
-    const registeredUser = [
-        { id: 1, name: "Jesús Alberto Cruz" },
-        { id: 2, name: "María Fernanda Gómez" },
-        { id: 3, name: "Juan Carlos Pérez" },
-    ];
+    const cartContainer = document.getElementById("cart-modal-container");
+    const totalPriceEl = document.getElementById("cart-total-price");
 
-    const defaultOptions = ['Adulto', 'Adulta', 'Niño', 'Niña'];
+    const selectMesa = document.getElementById("select-mesa");
+    const selectUsuario = document.getElementById("select-usuario");
+    const selectPreparacion = document.getElementById("select-preparacion");
 
-    const searchInput = document.getElementById('user-search-input');
-    const dropdownList = document.getElementById('user-dropdown-list');
-    const hiddenIdInput = document.getElementById('selected-user-id');
-    const hiddenIdentifierInput = document.getElementById('selected-user-identifier');
-    const hiddencreateNewInput = document.getElementById('create-new-user');
+    const metaSummary = document.getElementById("order-meta-summary");
+    const summaryMesa = document.getElementById("summary-mesa");
+    const summaryUsuario = document.getElementById("summary-usuario");
+    const summaryPrep = document.getElementById("summary-prep");
 
-    if (searchInput && dropdownList) {
-        
-        function filterUsers(query) {
-            dropdownList.innerHTML = ''; 
-            const cleanQuery = query.trim().toLowerCase(); 
+    let cart = [];
 
-            if (cleanQuery === '') {
-                const headerDefault = document.createElement('li');
-                headerDefault.className = 'px-4 py-1 text-xs font-bold text-on-surface-variant bg-surface-container-high select-none';
-                headerDefault.textContent = 'PERFILES RÁPIDOS';
-                dropdownList.appendChild(headerDefault);
+    function updateMetaSummary() {
+        const mesaVal = selectMesa.value;
+        const usuarioVal = selectUsuario.value;
+        const prepVal = selectPreparacion.value;
 
-                defaultOptions.forEach(option => {
-                    const li = document.createElement('li');
-                    li.className = 'px-4 py-2 hover:bg-primary hover:text-on-primary cursor-pointer transition-colors';
-                    li.textContent = option;
-                    li.addEventListener('click', () => {
-                        selectUser('', option, '0');
-                    });
-                    dropdownList.appendChild(li);
-                });
+        if (mesaVal || usuarioVal || prepVal) {
+            metaSummary.classList.remove("hidden");
+            summaryMesa.textContent = mesaVal || "No seleccionada";
+            summaryUsuario.textContent = usuarioVal || "No seleccionado";
+            summaryPrep.textContent = prepVal || "No seleccionada";
+        } else {
+            metaSummary.classList.add("hidden");
+        }
+    }
 
-                const headerUsers = document.createElement('li');
-                headerUsers.className = 'px-4 py-1 text-xs font-bold text-on-surface-variant bg-surface-container-high select-none border-t border-outline';
-                headerUsers.textContent = 'USUARIOS REGISTRADOS';
-                dropdownList.appendChild(headerUsers);
+    selectMesa.addEventListener("change", updateMetaSummary);
+    selectUsuario.addEventListener("change", updateMetaSummary);
+    selectPreparacion.addEventListener("change", updateMetaSummary);
 
-                registeredUser.forEach(user => {
-                    const li = document.createElement('li');
-                    li.className = 'px-4 py-2 hover:bg-primary hover:text-on-primary cursor-pointer transition-colors';
-                    li.textContent = user.name;
-                    li.addEventListener('click', () => {
-                        selectUser(user.id, user.name, '0');
-                    });
-                    dropdownList.appendChild(li);
-                });
+    document.addEventListener("click", (e) => {
+        const addBtn = e.target.closest('[data-action="add-to-cart"]');
+        if (addBtn) {
+            const id = addBtn.getAttribute("data-id");
+            const productCard =
+                addBtn.closest(".product-card") || addBtn.parentElement;
 
-                dropdownList.classList.remove('hidden');
+            const nameEl =
+                productCard.querySelector(".product-name") ||
+                productCard.querySelector("h4") ||
+                productCard.querySelector("p");
+            const priceEl =
+                productCard.querySelector(".product-price") ||
+                productCard.querySelector("span");
+
+            const name =
+                addBtn.getAttribute("data-name") ||
+                (nameEl ? nameEl.innerText.trim() : "Producto");
+            let rawPrice =
+                addBtn.getAttribute("data-price") ||
+                (priceEl ? priceEl.innerText.replace("$", "").trim() : "0");
+            const price = parseFloat(rawPrice) || 0;
+
+            const existingItem = cart.find((item) => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+
+            updateCartUI();
+        }
+
+        const plusBtn = e.target.closest(".cart-btn-plus");
+        if (plusBtn) {
+            const id = plusBtn.getAttribute("data-id");
+            const item = cart.find((i) => i.id === id);
+            if (item) {
+                item.quantity += 1;
+                updateCartUI();
+            }
+        }
+
+        const minusBtn = e.target.closest(".cart-btn-minus");
+        if (minusBtn) {
+            const id = minusBtn.getAttribute("data-id");
+            const item = cart.find((i) => i.id === id);
+            if (item) {
+                item.quantity -= 1;
+                if (item.quantity <= 0) {
+                    cart = cart.filter((i) => i.id !== id);
+                }
+                updateCartUI();
+            }
+        }
+
+        // Validación al hacer clic en Confirmar Pedido
+        const confirmBtn = e.target.closest("#btn-confirm-order");
+        if (confirmBtn) {
+            if (!selectMesa.value) {
+                alert("Por favor selecciona una Mesa.");
+                selectMesa.focus();
+                return;
+            }
+            if (!selectUsuario.value) {
+                alert("Por favor selecciona un Usuario.");
+                selectUsuario.focus();
+                return;
+            }
+            if (!selectPreparacion.value) {
+                alert("Por favor selecciona la Preparación.");
+                selectPreparacion.focus();
+                return;
+            }
+            if (cart.length === 0) {
+                alert("Tu orden está vacía. Agrega al menos un producto.");
                 return;
             }
 
-            const filtered = registeredUser.filter(user => 
-                user.name.toLowerCase().includes(cleanQuery)
-            );
+            const newOrder = {
+                id: Date.now(),
+                mesa: selectMesa.value,
+                usuario: selectUsuario.value,
+                preparacion: selectPreparacion.value,
+                productos: [...cart],
+                total: cart.reduce(
+                    (acc, item) => acc + item.price * item.quantity,
+                    0,
+                ),
+                tiempo: "Hace un momento",
+            };
 
-            if (filtered.length > 0) {
-                filtered.forEach(user => {
-                    const li = document.createElement('li');
-                    li.className = 'px-4 py-2 hover:bg-primary hover:text-on-primary cursor-pointer transition-colors';
-                    li.textContent = user.name;
-                    li.addEventListener('click', () => {
-                        selectUser(user.id, user.name, '0');
-                    });
-                    dropdownList.appendChild(li);
-                });
-                dropdownList.classList.remove('hidden');
-            } else {
-                const li = document.createElement('li');
-                li.className = 'px-4 py-3 text-primary hover:bg-surface-container-high cursor-pointer border-t border-outline flex flex-col';
-                li.innerHTML = `
-                    <span class="text-xs text-on-surface-variant">No encontrado en registros</span>
-                    <span class="font-bold">Registrar y usar: "${query}"</span>
-                `;
-                
-                li.addEventListener('click', () => {
-                    selectUser('', query, '1'); 
-                });
-                dropdownList.appendChild(li);
-                dropdownList.classList.remove('hidden');
-            }
+            let ordersAdd = JSON.parse(localStorage.getItem("my_orders")) || [];
+            ordersAdd.unshift(newOrder);
+
+            localStorage.setItem("my_orders", JSON.stringify(ordersAdd));
+
+            cart = [];
+            updateCartUI();
+
+            window.location.href = "/orders";
+        }
+    });
+
+    function updateCartUI() {
+        renderCartModal();
+        updateAllButtonBadges();
+        updateTotalPrice();
+    }
+
+    function renderCartModal() {
+        if (!cartContainer) return;
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = `<p class="text-center text-xs text-on-surface-variant py-4">No hay productos en la orden</p>`;
+            return;
         }
 
-        function selectUser(id, name, createNew = '0') {
-            searchInput.value = name;
-            hiddenIdInput.value = id;
-            hiddenIdentifierInput.value = name;
-            if (hiddencreateNewInput) {
-                hiddencreateNewInput.value = createNew;
-            }
-            dropdownList.classList.add('hidden');
-        }
+        let html = "";
+        cart.forEach((item) => {
+            html += `
+                <div class="flex justify-between items-center group py-2 border-b border-outline-variant/30">
+                    <div>
+                        <p class="font-label-lg text-label-lg text-on-surface">${item.name}</p>
+                        <p class="text-xs text-on-surface-variant">$${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="flex items-center gap-xs bg-surface-container-highest rounded-full px-2 py-1">
+                        <button type="button" class="cart-btn-minus w-6 h-6 rounded-full hover:bg-outline-variant flex items-center justify-center text-on-surface-variant transition-colors" data-id="${item.id}">-</button>
+                        <span class="font-label-lg px-1">${item.quantity}</span>
+                        <button type="button" class="cart-btn-plus w-6 h-6 rounded-full hover:bg-outline-variant flex items-center justify-center text-on-surface-variant transition-colors" data-id="${item.id}">+</button>
+                    </div>
+                </div>
+            `;
+        });
 
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value;
-            if (query.trim() === '') {
-                hiddenIdInput.value = '';
-                hiddenIdentifierInput.value = '';
-                if (hiddencreateNewInput) hiddencreateNewInput.value = '0';
+        cartContainer.innerHTML = html;
+    }
+
+    function updateTotalPrice() {
+        if (!totalPriceEl) return;
+        const total = cart.reduce(
+            (acc, item) => acc + item.price * item.quantity,
+            0,
+        );
+        totalPriceEl.textContent = `$${total.toFixed(2)}`;
+    }
+
+    function updateAllButtonBadges() {
+        const addButtons = document.querySelectorAll(
+            '[data-action="add-to-cart"]',
+        );
+
+        addButtons.forEach((button) => {
+            const productId = button.getAttribute("data-id");
+            const badge = button.querySelector(".product-qty-badge");
+
+            if (!badge) return;
+
+            const cartItem = cart.find((item) => item.id === productId);
+
+            if (cartItem && cartItem.quantity > 0) {
+                badge.textContent = cartItem.quantity;
+                badge.classList.remove("hidden");
             } else {
-                hiddenIdentifierInput.value = query;
-            }
-            filterUsers(query);
-        });
-
-        searchInput.addEventListener('focus', () => {
-            filterUsers(searchInput.value);
-        });
-
-        document.addEventListener('click', (e) => {
-            const container = document.getElementById('user-search-container');
-            if (container && !container.contains(e.target)) {
-                dropdownList.classList.add('hidden');
+                badge.textContent = "0";
+                badge.classList.add("hidden");
             }
         });
     }
