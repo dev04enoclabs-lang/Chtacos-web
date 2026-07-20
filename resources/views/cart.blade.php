@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- Token CSRF indispensable para las peticiones Fetch hacia Laravel -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Chtacos Carrito</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
@@ -47,86 +49,73 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="font-headline-lg text-headline-lg text-on-surface">Tu Carrito</h2>
-                    <p class="font-body-md text-body-md text-on-surface-variant">Revisa tus deliciosas elecciones antes
-                        de confirmar.</p>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Revisa tus pedidos para que todo esté
+                        bien.
+                    </p>
                 </div>
-                <a class="hidden md:flex items-center gap-2 text-primary font-label-lg hover:underline transition-all"
-                    href="#">
-                    <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
-                    Seguir comprando
-                </a>
             </div>
 
             <div class="space-y-4">
-                <div class="flex items-center gap-2 mb-4 pb-2 border-b border-outline-variant/30">
-                    <span class="material-symbols-outlined text-primary">table_restaurant</span>
-                    <span class="font-label-lg text-on-surface">Mesa 4 - Pedido de: <span class="font-bold">Juan Pérez
-                            (Tú)</span></span>
-                </div>
+                <section class="fade-in" style="animation-delay: 0.1s;">
+                    <div
+                        class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
 
-                <div
-                    class="cart-item-enter bg-surface-container-low p-4 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] flex items-center gap-4 group">
-                    <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                        <img class="w-full h-full object-cover" alt="Tacos al Pastor"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsJK1lzh20Hy3hzDhtyTd4uCNt45797Oi54vjZjnu3-MIZr_J2-5d_1l5V1H4tQca_W1Apjyr6Nh_rbMJq5rCbBoa6tCJC3naxsNL8M6TDoNCvRKBc8seM7oBPXWRrTXonOkAg4A3UjwBc93F09mpy6zYWB0wJu1lQ8lIHdIO143JJoxmMqMjxKY0QlBQqRrT7Ad3qd2FUZaWc-E9QwakhV9fbcLxZX5LuuEJWvx1nCuEuHQxMH-r_5g">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Tacos al Pastor (Orden)</h3>
-                            <button class="text-outline hover:text-error transition-colors">
-                                <span class="material-symbols-outlined" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Con piña, cilantro,
-                            cebolla y salsa especial de la casa.</p>
-                        <div class="flex justify-between items-center mt-3">
-                            <div class="flex items-center bg-surface-container-high rounded-full px-2 py-1">
-                                <button
-                                    class="w-8 h-8 flex items-center justify-center text-primary active:scale-90 transition-all">
-                                    <span class="material-symbols-outlined" data-icon="remove">remove</span>
-                                </button>
-                                <span class="px-4 font-label-lg">2</span>
-                                <button
-                                    class="w-8 h-8 flex items-center justify-center text-primary active:scale-90 transition-all">
-                                    <span class="material-symbols-outlined" data-icon="add">add</span>
-                                </button>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-on-secondary-container"
+                                    style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
                             </div>
-                            <span class="font-price-display text-price-display text-secondary">$170.00</span>
+                            <div>
+                                <h2 class="font-headline-md text-headline-md text-on-surface" id="cart-table-title">Mesa
+                                    1</h2>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="cart-item-enter bg-surface-container-low p-4 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] flex items-center gap-4 group"
-                    style="animation-delay: 0.1s;">
-                    <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                        <img class="w-full h-full object-cover" alt="Agua de Horchata"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCST-6QNmrzZXvRd80M3ysQl8ecOmCQ_IPQvJvLlsYpvA3RPkDelGNZPTg8tzAD9ZQ_R72LrqvkZ9L4gp7p2OB-nfBTvDbTGMuRDjKbGcSqT1pVQAlqs5QJg5hQEWdcXEEvUOCoRI7cKOUFvVBWXcLUz6VqRxO3nYXQSAu3BDyaAQXPjmfLHgu_6ATpeFClXVqCCmKL-rgeeSUG0Nu2400jgcDT2e_Q3ugGxWnSBHAwW4GM3qo0cwLb_w">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-headline-md text-headline-md text-on-surface">Agua de Horchata Grande</h3>
-                            <button class="text-outline hover:text-error transition-colors">
-                                <span class="material-symbols-outlined" data-icon="delete">delete</span>
-                            </button>
+                        <div class="relative min-w-[180px]">
+                            <select id="cart-table-select"
+                                class="w-full bg-surface-container-highest dark:bg-surface-variant pl-4 pr-10 py-2 rounded-full font-label-lg text-label-lg text-on-surface hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary border-none">
+                                <option value="0" disabled selected hidden>Selecciona la mesa</option>
+                                <option value="1">Mesa 1</option>
+                                <option value="2">Mesa 2</option>
+                                <option value="3">Mesa 3</option>
+                            </select>
+                            <span
+                                class="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface">
+                                expand_more
+                            </span>
                         </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Receta tradicional con
-                            un toque de canela artesanal.</p>
-                        <div class="flex justify-between items-center mt-3">
-                            <div class="flex items-center bg-surface-container-high rounded-full px-2 py-1">
-                                <button
-                                    class="w-8 h-8 flex items-center justify-center text-primary active:scale-90 transition-all">
-                                    <span class="material-symbols-outlined" data-icon="remove">remove</span>
-                                </button>
-                                <span class="px-4 font-label-lg">1</span>
-                                <button
-                                    class="w-8 h-8 flex items-center justify-center text-primary active:scale-90 transition-all">
-                                    <span class="material-symbols-outlined" data-icon="add">add</span>
-                                </button>
-                            </div>
-                            <span class="font-price-display text-price-display text-secondary">$45.00</span>
+                    </div>
+                </section>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <label
+                        class="cursor-pointer border border-outline-variant rounded-xl p-4 flex flex-col gap-2 hover:border-primary transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="font-headline-sm text-on-surface">Pago por Usuario</span>
+                            <input type="radio" name="tipo_pago" value="usuario" id="radio-pago-usuario"
+                                class="accent-primary">
+                        </div>
+                        <span class="text-body-sm text-on-surface-variant">Pagas solo lo que tú pediste</span>
+                    </label>
+                    <label
+                        class="cursor-pointer border border-outline-variant rounded-xl p-4 flex flex-col gap-2 hover:border-primary transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="font-headline-sm text-on-surface">Pago Total Mesa</span>
+                            <input type="radio" name="tipo_pago" value="total" id="radio-pago-total"
+                                class="accent-primary" checked>
+                        </div>
+                        <span class="text-body-sm text-on-surface-variant">Pagas la cuenta completa</span>
+                    </label>
+                    <div id="usuarios-selector-container"
+                        class="hidden mb-6 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+                        <h3 class="font-headline-sm text-on-surface mb-3">Selecciona los clientes a pagar:</h3>
+                        <div id="lista-checkbox-usuarios" class="flex flex-col gap-2">
                         </div>
                     </div>
                 </div>
+                <section class="space-y-4 fade-in" style="animation-delay: 0.2s;">
+                    <div id="cart-orders-container" class="space-y-4">
+                    </div>
+                </section>
             </div>
 
             <div class="bg-surface-container p-6 md:p-8 rounded-xl space-y-6">
@@ -136,48 +125,24 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <label class="font-label-lg text-on-surface-variant" for="name_customer">Nombre Completo</label>
+                        <label class="font-label-lg text-on-surface-variant" for="name_customer">Nombre
+                            Completo</label>
                         <input
                             class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md"
-                            id="name_customer" placeholder="Ej. Juan Pérez" type="text">
+                            id="name_customer" placeholder="Ej. Juan Pérez" type="text"
+                            value="{{ auth()->user()->name ?? '' }}">
                     </div>
                     <div class="space-y-2">
                         <label class="font-label-lg text-on-surface-variant" for="email">Correo Electrónico</label>
                         <input
                             class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md"
-                            id="email" placeholder="juan@ejemplo.com" type="email">
+                            id="email" placeholder="juan@ejemplo.com" type="email"
+                            value="{{ auth()->user()->email ?? '' }}">
                     </div>
                 </div>
                 <div class="pt-2">
                     <p class="font-body-md text-body-md text-on-surface-variant italic">Te enviaremos el ticket y el
                         estado de tu pedido a este correo.</p>
-                </div>
-            </div>
-
-            <div class="bg-surface-container p-6 md:p-8 rounded-xl space-y-6 mt-8">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary">payments</span>
-                    <h3 class="font-headline-md text-headline-md">Método de Pago</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label
-                        class="flex items-center gap-4 p-4 rounded-xl border-2 border-primary bg-primary-container/10 cursor-pointer">
-                        <input checked="" class="text-primary focus:ring-primary" name="payment_type"
-                            type="radio" value="user">
-                        <div>
-                            <p class="font-label-lg">Pago por Usuario</p>
-                            <p class="text-sm text-on-surface-variant">Pagas solo lo que tú pediste</p>
-                        </div>
-                    </label>
-                    <label
-                        class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant hover:bg-surface-container-high cursor-pointer transition-colors">
-                        <input class="text-primary focus:ring-primary" name="payment_type" type="radio"
-                            value="table">
-                        <div>
-                            <p class="font-label-lg">Pago Total de Mesa</p>
-                            <p class="text-sm text-on-surface-variant">Pagas la cuenta completa</p>
-                        </div>
-                    </label>
                 </div>
             </div>
         </div>
@@ -189,16 +154,16 @@
                     <div class="space-y-4 mb-8">
                         <div class="flex justify-between items-center text-on-surface-variant">
                             <span class="font-body-md">Mesa / Usuario</span>
-                            <span class="font-label-lg">Mesa 4 / Juan P.</span>
+                            <span class="font-label-lg" id="summary-table-user">Mesa 1 / Juan P.</span>
                         </div>
                         <div class="flex justify-between items-center text-on-surface-variant">
                             <span class="font-body-md">Modo de Pago</span>
-                            <span class="font-label-lg">Individual</span>
+                            <span class="font-label-lg" id="summary-payment-mode">Individual</span>
                         </div>
                         <div class="h-px bg-outline-variant my-2"></div>
                         <div class="flex justify-between items-center text-on-surface-variant">
-                            <span class="font-body-md">Tus artículos (3)</span>
-                            <span class="font-label-lg">$215.00</span>
+                            <span class="font-body-md" id="summary-items-count">Tus artículos (0)</span>
+                            <span class="font-label-lg" id="summary-subtotal">$0.00</span>
                         </div>
                         <div class="flex justify-between items-center text-on-surface-variant">
                             <span class="font-body-md">Envío / Servicio</span>
@@ -207,10 +172,12 @@
                         <div class="h-px bg-outline-variant my-4"></div>
                         <div class="flex justify-between items-center">
                             <span class="font-headline-md text-headline-md">Tu Total</span>
-                            <span class="font-headline-md text-headline-md text-primary">$215.00</span>
+                            <span class="font-headline-md text-headline-md text-primary"
+                                id="summary-total">$0.00</span>
                         </div>
                     </div>
                     <div class="space-y-3">
+                        <!-- El script detecta este botón mediante la clase .bg-primary -->
                         <button
                             class="w-full bg-primary text-on-primary font-label-lg py-4 rounded-full shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                             Pago en Efectivo
@@ -218,7 +185,7 @@
                         </button>
                         <button
                             class="w-full md:hidden border-2 border-primary text-primary font-label-lg py-4 rounded-full hover:bg-primary-container active:scale-[0.98] transition-all">
-                            Pago por tarjeta 
+                            Pago por tarjeta
                         </button>
                     </div>
                     <div class="mt-6 flex items-center justify-center gap-4 opacity-60">

@@ -46,7 +46,6 @@
 
     <main class="max-w-3xl mx-auto px-margin-mobile mt-6 space-y-8">
 
-        <!-- Context Filter: Mesa Card -->
         <section class="fade-in" style="animation-delay: 0.1s;">
             <div
                 class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
@@ -57,12 +56,12 @@
                             style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
                     </div>
                     <div>
-                        <h2 class="font-headline-md text-headline-md text-on-surface">Mesa 1</h2>
+                        <h2 class="font-headline-md text-headline-md text-on-surface" id="order-table-title">Mesa 1</h2>
                     </div>
                 </div>
 
                 <div class="relative min-w-[180px]">
-                    <select
+                    <select id="order-table-select"
                         class="w-full bg-surface-container-highest dark:bg-surface-variant pl-4 pr-10 py-2 rounded-full font-label-lg text-label-lg text-on-surface hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary border-none">
                         <option value="0" disabled selected hidden>Selecciona la mesa</option>
                         <option value="1">Mesa 1</option>
@@ -77,167 +76,21 @@
             </div>
         </section>
 
-        <!-- User Group: Juan Pérez (Current User) -->
-        <section class="space-y-4 fade-in" style="animation-delay: 0.2s;">
-            <div class="flex items-center justify-between px-1">
-                <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
-                    Juan Pérez <span class="text-on-surface-variant font-normal text-body-md">(Tú)</span>
-                </h3>
-                <span class="font-price-display text-price-display text-primary">$420.00</span>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Card 1: En cocina -->
-                <div
-                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm hover:scale-[0.50] transition-transform duration-200">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-secondary"
-                                style="font-variation-settings: 'FILL' 1;">skillet</span>
-                            <span
-                                class="font-label-lg text-label-lg text-secondary uppercase tracking-wider bg-secondary-fixed/30 px-2 py-0.5 rounded">En
-                                cocina</span>
-                        </div>
-                        <span class="text-on-surface-variant text-label-lg">Hace 12 min</span>
-                    </div>
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-6 h-6 flex items-center justify-center bg-surface-container-high rounded text-sm font-bold">2</span>
-                                <span class="font-body-md text-body-md text-on-surface">Tacos al Pastor Especial</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-body-md text-on-surface-variant">$150.00</span>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1"><span
-                                        class="material-symbols-outlined text-sm">delete</span></button>
-                            </div>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-6 h-6 flex items-center justify-center bg-surface-container-high rounded text-sm font-bold">1</span>
-                                <span class="font-body-md text-body-md text-on-surface">Agua de Horchata Grande</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-body-md text-on-surface-variant">$65.00</span>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1"><span
-                                        class="material-symbols-outlined text-sm">delete</span></button>
-                            </div>
-                        </li>
-                    </ul>
-                    <button
-                        class="w-full py-2 mb-4 border border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors"><span
-                            class="material-symbols-outlined text-sm">add</span> Agregar Producto</button>
-                    <div class="pt-4 border-t border-outline-variant flex justify-between items-center">
-                        <p class="text-on-surface-variant text-label-lg italic">"Sin cebolla en los tacos por favor"</p>
-                        <p class="font-price-display text-price-display text-on-surface">$215.00</p>
-                    </div>
-                </div>
-
-                <!-- Card 2: Servido -->
-                <div
-                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm opacity-90">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-tertiary"
-                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                            <span
-                                class="font-label-lg text-label-lg text-tertiary uppercase tracking-wider bg-tertiary-fixed/30 px-2 py-0.5 rounded">Servido</span>
-                        </div>
-                        <span class="text-on-surface-variant text-label-lg">Hace 45 min</span>
-                    </div>
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-6 h-6 flex items-center justify-center bg-surface-container-high rounded text-sm font-bold">1</span>
-                                <span class="font-body-md text-body-md text-on-surface">Gringa de Asada</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-body-md text-on-surface-variant">$205.00</span>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1"><span
-                                        class="material-symbols-outlined text-sm">delete</span></button>
-                            </div>
-                        </li>
-                    </ul>
-                    <button
-                        class="w-full py-2 mb-4 border border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors"><span
-                            class="material-symbols-outlined text-sm">add</span> Agregar Producto</button>
-                    <div class="pt-4 border-t border-outline-variant flex justify-end">
-                        <p class="font-price-display text-price-display text-on-surface">$205.00</p>
-                    </div>
-                </div>
-            </div>
+        <section id="orders-container" class="space-y-4 fade-in" style="animation-delay: 0.2s;">
+            <p class="text-center text-on-surface-variant py-8">No hay pedidos registrados todavía.</p>
         </section>
 
-        <!-- User Group: María García -->
-        <section class="space-y-4 fade-in" style="animation-delay: 0.3s;">
-            <div class="flex items-center justify-between px-1">
-                <h3 class="font-headline-md text-headline-md text-on-surface">María García</h3>
-                <span class="font-price-display text-price-display text-on-surface-variant">$185.00</span>
-            </div>
-            <div class="space-y-4">
-                <!-- Card 1: Pendiente -->
-                <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-on-surface-variant">schedule</span>
-                            <span
-                                class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider bg-surface-container-highest px-2 py-0.5 rounded">Pendiente</span>
-                        </div>
-                        <span class="text-on-surface-variant text-label-lg">Recién pedido</span>
-                    </div>
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-6 h-6 flex items-center justify-center bg-surface-container-high rounded text-sm font-bold">3</span>
-                                <span class="font-body-md text-body-md text-on-surface">Tacos de Suadero</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-body-md text-on-surface-variant">$135.00</span>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1"><span
-                                        class="material-symbols-outlined text-sm">delete</span></button>
-                            </div>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="w-6 h-6 flex items-center justify-center bg-surface-container-high rounded text-sm font-bold">1</span>
-                                <span class="font-body-md text-body-md text-on-surface">Refresco de Vidrio</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-body-md text-on-surface-variant">$50.00</span>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1"><span
-                                        class="material-symbols-outlined text-sm">delete</span></button>
-                            </div>
-                        </li>
-                    </ul>
-                    <button
-                        class="w-full py-2 mb-4 border border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors"><span
-                            class="material-symbols-outlined text-sm">add</span> Agregar Producto</button>
-                    <div class="pt-4 border-t border-outline-variant flex justify-between items-center">
-                        <button class="text-primary font-label-lg flex items-center gap-1 hover:underline">
-                            <span class="material-symbols-outlined text-sm">edit</span> Editar
-                        </button>
-                        <p class="font-price-display text-price-display text-on-surface">$185.00</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Summary Floating Action -->
         <div class="pt-8 pb-12 flex flex-col gap-4">
             <div class="flex justify-between items-center px-2">
-                <span class="text-body-lg font-bold text-on-surface">Total de la Mesa</span>
-                <span class="text-headline-lg font-bold text-primary">$605.00</span>
+                <span class="text-body-lg font-bold text-on-surface" id="total-table-label">Total de la Mesa (1)</span>
+
+                <span class="text-headline-lg font-bold text-primary" id="total-table-amount">$00.00</span>
             </div>
-            <button
+            <a href="{{ route('cart') }}" id="btn-account"
                 class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline-md flex items-center justify-center gap-3 shadow-lg hover:bg-surface-tint transition-all active:scale-95 duration-100">
                 <span class="material-symbols-outlined">payments</span>
                 Pedir la Cuenta
-            </button>
+            </a>
         </div>
     </main>
 
