@@ -89,25 +89,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let cart = [];
 
     function updateMetaSummary() {
-        const mesaVal = selectMesa.value;
-        const usuarioVal = selectUsuario.value;
-        const prepVal = selectPreparacion.value;
+        const mesaVal = selectMesa ? selectMesa.value : '';
+        const usuarioVal = selectUsuario ? selectUsuario.value : '';
+        const prepVal = selectPreparacion ? selectPreparacion.value : '';
 
-        if (mesaVal || usuarioVal || prepVal) {
-            metaSummary.classList.remove("hidden");
-            summaryMesa.textContent = mesaVal || "No seleccionada";
-            summaryUsuario.textContent = usuarioVal || "No seleccionado";
-            summaryPrep.textContent = prepVal || "No seleccionada";
-        } else {
-            metaSummary.classList.add("hidden");
+        if (metaSummary) {
+            if (mesaVal || usuarioVal || prepVal) {
+                metaSummary.classList.remove("hidden");
+                if (summaryMesa) summaryMesa.textContent = mesaVal || "No seleccionada";
+                if (summaryUsuario) summaryUsuario.textContent = usuarioVal || "No seleccionado";
+                if (summaryPrep) summaryPrep.textContent = prepVal || "No seleccionada";
+            } else {
+                metaSummary.classList.add("hidden");
+            }
         }
     }
 
-    selectMesa.addEventListener("change", updateMetaSummary);
-    selectUsuario.addEventListener("change", updateMetaSummary);
-    selectPreparacion.addEventListener("change", updateMetaSummary);
+    if (selectMesa) selectMesa.addEventListener("change", updateMetaSummary);
+    if (selectUsuario) selectUsuario.addEventListener("change", updateMetaSummary);
+    if (selectPreparacion) selectPreparacion.addEventListener("change", updateMetaSummary);
 
     document.addEventListener("click", (e) => {
+        // AGREGAR AL CARRITO
         const addBtn = e.target.closest('[data-action="add-to-cart"]');
         if (addBtn) {
             const id = addBtn.getAttribute("data-id");
@@ -140,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateCartUI();
         }
 
+        // BOTÓN MÁS (+)
         const plusBtn = e.target.closest(".cart-btn-plus");
         if (plusBtn) {
             const id = plusBtn.getAttribute("data-id");
@@ -150,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // BOTÓN MENOS (-)
         const minusBtn = e.target.closest(".cart-btn-minus");
         if (minusBtn) {
             const id = minusBtn.getAttribute("data-id");
@@ -163,7 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Validación al hacer clic en Confirmar Pedido
+        // ==========================================
+        // 3. CONFIRMAR PEDIDO (CON LÓGICA OFFLINE)
+        // ==========================================
         const confirmBtn = e.target.closest("#btn-confirm-order");
         if (confirmBtn) {
             if (!selectMesa.value) {
@@ -199,14 +206,40 @@ document.addEventListener("DOMContentLoaded", () => {
                 tiempo: "Hace un momento",
             };
 
+            // CASO 1: SIN CONEXIÓN A INTERNET
+            if (!navigator.onLine) {
+                // Guarda en la cola para sincronizar con la Base de Datos MySQL cuando regrese el internet
+                if (window.OfflineManager) {
+                    window.OfflineManager.saveOrder(newOrder);
+                }
+
+                // También lo guarda localmente en "my_orders" por si tu vista lo usa
+                let ordersAdd = JSON.parse(localStorage.getItem("my_orders")) || [];
+                ordersAdd.unshift(newOrder);
+                localStorage.setItem("my_orders", JSON.stringify(ordersAdd));
+
+                alert("⚠️ Sin conexión. El pedido ha sido guardado localmente y se enviará automáticamente al recuperar internet.");
+
+                // Limpiamos el carrito en pantalla y NO redirigimos para evitar el error del dinosaurio
+                cart = [];
+                updateCartUI();
+                return;
+            }
+
+            // CASO 2: CON CONEXIÓN A INTERNET (Proceso normal)
+            if (window.OfflineManager) {
+                window.OfflineManager.saveOrder(newOrder);
+                window.OfflineManager.syncOrders(); // Sincroniza directamente con el controlador
+            }
+
             let ordersAdd = JSON.parse(localStorage.getItem("my_orders")) || [];
             ordersAdd.unshift(newOrder);
-
             localStorage.setItem("my_orders", JSON.stringify(ordersAdd));
 
             cart = [];
             updateCartUI();
 
+            // Solo redirige si hay internet
             window.location.href = "/orders";
         }
     });

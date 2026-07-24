@@ -1,56 +1,18 @@
-<!DOCTYPE html>
-<html class="light" lang="es">
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <!-- Token CSRF indispensable para las peticiones Fetch hacia Laravel -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Chtacos Carrito</title>
+@section('title', "Ch'Tacos - Carrito")
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-
+@push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/cart.css') }}">
+@endpush
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-</head>
-
-<body class="bg-surface text-on-surface min-h-screen pb-24">
-
-    <header
-        class="w-full top-0 sticky z-50 bg-background dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-19">
-        <div
-            class="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-full w-full max-w-7xl mx-auto">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim"
-                    style="font-size: 28px;">restaurant_menu</span>
-                <h1 class="font-headline-xl text-headline-xl text-primary dark:text-primary-fixed-dim tracking-tight">
-                    Ch'Tacos</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <h2 class="text-xl font-bold text-gray-900 drop-shadow-sm">
-                    {{ auth()->user()->name ?? 'Invitado' }}
-                </h2>
-                <div
-                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
-                    <img class="w-full h-full object-cover" alt="Mesero Sabor y Brasa"
-                        src="{{ asset('assets/img/loading.jpg') }}" />
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main
-        class="max-w-screen-xl mx-auto px-margin-mobile md:px-margin-desktop py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+@section('content')
+    <div class="max-w-screen-xl mx-auto px-margin-mobile md:px-margin-desktop py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div class="lg:col-span-8 space-y-8">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="font-headline-lg text-headline-lg text-on-surface">Tu Carrito</h2>
-                    <p class="font-body-md text-body-md text-on-surface-variant">Revisa tus pedidos para que todo esté
-                        bien.
+                    <p class="font-body-md text-body-md text-on-surface-variant">Revisa tus pedidos para que todo esté bien.
                     </p>
                 </div>
             </div>
@@ -59,15 +21,14 @@
                 <section class="fade-in" style="animation-delay: 0.1s;">
                     <div
                         class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
-
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined text-on-secondary-container"
                                     style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
                             </div>
                             <div>
-                                <h2 class="font-headline-md text-headline-md text-on-surface" id="cart-table-title">Mesa
-                                    1</h2>
+                                <h2 class="font-headline-md text-headline-md text-on-surface" id="cart-table-title">Mesa 1
+                                </h2>
                             </div>
                         </div>
 
@@ -86,6 +47,7 @@
                         </div>
                     </div>
                 </section>
+
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <label
                         class="cursor-pointer border border-outline-variant rounded-xl p-4 flex flex-col gap-2 hover:border-primary transition-all">
@@ -96,6 +58,7 @@
                         </div>
                         <span class="text-body-sm text-on-surface-variant">Pagas solo lo que tú pediste</span>
                     </label>
+
                     <label
                         class="cursor-pointer border border-outline-variant rounded-xl p-4 flex flex-col gap-2 hover:border-primary transition-all">
                         <div class="flex items-center justify-between">
@@ -105,16 +68,16 @@
                         </div>
                         <span class="text-body-sm text-on-surface-variant">Pagas la cuenta completa</span>
                     </label>
+
                     <div id="usuarios-selector-container"
-                        class="hidden mb-6 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+                        class="hidden col-span-2 mb-6 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
                         <h3 class="font-headline-sm text-on-surface mb-3">Selecciona los clientes a pagar:</h3>
-                        <div id="lista-checkbox-usuarios" class="flex flex-col gap-2">
-                        </div>
+                        <div id="lista-checkbox-usuarios" class="flex flex-col gap-2"></div>
                     </div>
                 </div>
+
                 <section class="space-y-4 fade-in" style="animation-delay: 0.2s;">
-                    <div id="cart-orders-container" class="space-y-4">
-                    </div>
+                    <div id="cart-orders-container" class="space-y-4"></div>
                 </section>
             </div>
 
@@ -125,24 +88,23 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <label class="font-label-lg text-on-surface-variant" for="name_customer">Nombre
-                            Completo</label>
+                        <label class="font-label-lg text-on-surface-variant" for="name_customer">Nombre Completo</label>
                         <input
-                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md"
+                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md text-on-surface"
                             id="name_customer" placeholder="Ej. Juan Pérez" type="text"
                             value="{{ auth()->user()->name ?? '' }}">
                     </div>
                     <div class="space-y-2">
                         <label class="font-label-lg text-on-surface-variant" for="email">Correo Electrónico</label>
                         <input
-                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md"
+                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md text-on-surface"
                             id="email" placeholder="juan@ejemplo.com" type="email"
                             value="{{ auth()->user()->email ?? '' }}">
                     </div>
                 </div>
                 <div class="pt-2">
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Te enviaremos el ticket y el
-                        estado de tu pedido a este correo.</p>
+                    <p class="font-body-md text-body-md text-on-surface-variant italic">Te enviaremos el ticket y el estado
+                        de tu pedido a este correo.</p>
                 </div>
             </div>
         </div>
@@ -172,12 +134,10 @@
                         <div class="h-px bg-outline-variant my-4"></div>
                         <div class="flex justify-between items-center">
                             <span class="font-headline-md text-headline-md">Tu Total</span>
-                            <span class="font-headline-md text-headline-md text-primary"
-                                id="summary-total">$0.00</span>
+                            <span class="font-headline-md text-headline-md text-primary" id="summary-total">$0.00</span>
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <!-- El script detecta este botón mediante la clase .bg-primary -->
                         <button
                             class="w-full bg-primary text-on-primary font-label-lg py-4 rounded-full shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                             Pago en Efectivo
@@ -195,31 +155,9 @@
                 </div>
             </div>
         </aside>
-    </main>
+    </div>
+@endsection
 
-    <nav
-        class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter pb-4 pt-2 bg-surface dark:bg-surface-dim shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl">
-        <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200"
-            href="{{ route('menu') }}">
-            <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
-            <span class="font-label-lg text-label-lg">Menú</span>
-        </a>
-        <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200"
-            href="{{ route('orders') }}">
-            <span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
-            <span class="font-label-lg text-label-lg">Mis Pedidos</span>
-        </a>
-        <a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 active:scale-90 transition-all duration-200"
-            href="{{ route('cart') }}">
-            <span class="material-symbols-outlined" data-icon="shopping_cart"
-                style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
-            <span class="font-label-lg text-label-lg">Carrito</span>
-        </a>
-    </nav>
-
-    <!-- Scripts de la Aplicación -->
+@push('scripts')
     <script src="{{ asset('assets/js/cart.js') }}"></script>
-    <script src="{{ asset('assets/js/tallwind-config.js') }}"></script>
-</body>
-
-</html>
+@endpush
