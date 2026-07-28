@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
 
     // Le indicamos a Laravel el nombre exacto de la tabla en tu BD
-    protected $table = 'comandas'; 
+    protected $table = 'orders'; 
 
     protected $fillable = [
         'mesa',

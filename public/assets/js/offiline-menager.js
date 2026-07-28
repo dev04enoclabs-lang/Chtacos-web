@@ -31,7 +31,7 @@ window.OfflineManager = {
         if (!navigator.onLine) return; // Si sigue sin red, cancela
 
         try {
-            const response = await fetch('/api/pedidos/sincronizar', {
+            const response = await fetch(window.location.origin + '/pedidos/sincronizar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
