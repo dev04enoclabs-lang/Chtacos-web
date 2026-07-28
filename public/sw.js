@@ -4,7 +4,6 @@ const STATIC_ASSETS = [
     '/',
     '/menu',
     '/orders',
-    '/offline.html',
     
     // Archivos CSS
     '/assets/css/menu.css',

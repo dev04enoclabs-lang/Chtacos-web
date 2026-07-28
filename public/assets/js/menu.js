@@ -1,5 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
+    // 0. CAPTURAR PARÁMETROS DE URL Y ORDEN ACTIVA
+    // ==========================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const mesaUrl = urlParams.get("mesa");
+    const usuarioUrl = urlParams.get("usuario");
+    const orderIdUrl = urlParams.get("order_id");
+
+    const selectMesa = document.getElementById("select-mesa");
+    const selectUsuario = document.getElementById("select-usuario");
+    const selectPreparacion = document.getElementById("select-preparacion");
+
+    if (mesaUrl && selectMesa) {
+        selectMesa.value = mesaUrl;
+        if (!selectMesa.value) {
+            for (let option of selectMesa.options) {
+                if (
+                    option.value === mesaUrl ||
+                    option.value.includes(mesaUrl) ||
+                    option.text.includes(mesaUrl)
+                ) {
+                    selectMesa.value = option.value;
+                    break;
+                }
+            }
+        }
+        selectMesa.dispatchEvent(new Event("change"));
+    }
+
+    if (usuarioUrl && selectUsuario) {
+        selectUsuario.value = usuarioUrl;
+        if (!selectUsuario.value) {
+            for (let option of selectUsuario.options) {
+                if (
+                    option.value === usuarioUrl ||
+                    option.text.includes(usuarioUrl)
+                ) {
+                    selectUsuario.value = option.value;
+                    break;
+                }
+            }
+        }
+        selectUsuario.dispatchEvent(new Event("change"));
+    }
+
+    let cart = [];
+
+    if (orderIdUrl) {
+        localStorage.setItem("active_order_id", orderIdUrl);
+
+        // Bloquear los selects de mesa y usuario para evitar que los cambien
+        if (selectMesa) selectMesa.disabled = true;
+        if (selectUsuario) selectUsuario.disabled = true;
+
+        const pedidosGuardados =
+            JSON.parse(localStorage.getItem("my_orders")) || [];
+        const ordenExistente = pedidosGuardados.find(
+            (p) => String(p.id) === String(orderIdUrl),
+        );
+
+        if (ordenExistente) {
+            if (ordenExistente.productos) {
+                cart = [...ordenExistente.productos];
+            }
+            if (ordenExistente.preparacion && selectPreparacion) {
+                selectPreparacion.value = ordenExistente.preparacion;
+                selectPreparacion.dispatchEvent(new Event("change"));
+            }
+        }
+    } else {
+        localStorage.removeItem("active_order_id");
+        if (selectMesa) selectMesa.disabled = false;
+        if (selectUsuario) selectUsuario.disabled = false;
+    }
+
+    // ==========================================
     // 1. SECCIÓN: FILTRADO DE CATEGORÍAS (PRODUCTOS)
     // ==========================================
     const buttons = document.querySelectorAll("#category-filters button");
@@ -77,28 +152,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartContainer = document.getElementById("cart-modal-container");
     const totalPriceEl = document.getElementById("cart-total-price");
 
-    const selectMesa = document.getElementById("select-mesa");
-    const selectUsuario = document.getElementById("select-usuario");
-    const selectPreparacion = document.getElementById("select-preparacion");
-
     const metaSummary = document.getElementById("order-meta-summary");
     const summaryMesa = document.getElementById("summary-mesa");
     const summaryUsuario = document.getElementById("summary-usuario");
     const summaryPrep = document.getElementById("summary-prep");
 
-    let cart = [];
-
     function updateMetaSummary() {
-        const mesaVal = selectMesa ? selectMesa.value : '';
-        const usuarioVal = selectUsuario ? selectUsuario.value : '';
-        const prepVal = selectPreparacion ? selectPreparacion.value : '';
+        const mesaVal = selectMesa
+            ? selectMesa.options[selectMesa.selectedIndex]?.text ||
+              selectMesa.value
+            : "";
+        const usuarioVal = selectUsuario ? selectUsuario.value : "";
+        const prepVal = selectPreparacion ? selectPreparacion.value : "";
 
         if (metaSummary) {
             if (mesaVal || usuarioVal || prepVal) {
                 metaSummary.classList.remove("hidden");
-                if (summaryMesa) summaryMesa.textContent = mesaVal || "No seleccionada";
-                if (summaryUsuario) summaryUsuario.textContent = usuarioVal || "No seleccionado";
-                if (summaryPrep) summaryPrep.textContent = prepVal || "No seleccionada";
+                if (summaryMesa)
+                    summaryMesa.textContent = mesaVal || "No seleccionada";
+                if (summaryUsuario)
+                    summaryUsuario.textContent =
+                        usuarioVal || "No seleccionado";
+                if (summaryPrep)
+                    summaryPrep.textContent = prepVal || "No seleccionada";
             } else {
                 metaSummary.classList.add("hidden");
             }
@@ -106,8 +182,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (selectMesa) selectMesa.addEventListener("change", updateMetaSummary);
-    if (selectUsuario) selectUsuario.addEventListener("change", updateMetaSummary);
-    if (selectPreparacion) selectPreparacion.addEventListener("change", updateMetaSummary);
+    if (selectUsuario)
+        selectUsuario.addEventListener("change", updateMetaSummary);
+    if (selectPreparacion)
+        selectPreparacion.addEventListener("change", updateMetaSummary);
+
+    updateCartUI();
+    updateMetaSummary();
 
     document.addEventListener("click", (e) => {
         // AGREGAR AL CARRITO
@@ -169,23 +250,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ==========================================
-        // 3. CONFIRMAR PEDIDO (CON LÓGICA OFFLINE)
+        // 3. CONFIRMAR PEDIDO (ACTUALIZAR O CREAR)
         // ==========================================
         const confirmBtn = e.target.closest("#btn-confirm-order");
         if (confirmBtn) {
-            if (!selectMesa.value) {
+            const mesaValue = selectMesa.value;
+            const usuarioValue = selectUsuario.value;
+            const prepValue = selectPreparacion.value;
+
+            if (!mesaValue) {
                 alert("Por favor selecciona una Mesa.");
-                selectMesa.focus();
                 return;
             }
-            if (!selectUsuario.value) {
+            if (!usuarioValue) {
                 alert("Por favor selecciona un Usuario.");
-                selectUsuario.focus();
                 return;
             }
-            if (!selectPreparacion.value) {
+            if (!prepValue) {
                 alert("Por favor selecciona la Preparación.");
-                selectPreparacion.focus();
                 return;
             }
             if (cart.length === 0) {
@@ -193,53 +275,48 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const newOrder = {
-                id: Date.now(),
-                mesa: selectMesa.value,
-                usuario: selectUsuario.value,
-                preparacion: selectPreparacion.value,
-                productos: [...cart],
-                total: cart.reduce(
-                    (acc, item) => acc + item.price * item.quantity,
-                    0,
-                ),
-                tiempo: "Hace un momento",
-            };
-
-            // CASO 1: SIN CONEXIÓN A INTERNET
-            if (!navigator.onLine) {
-                // Guarda en la cola para sincronizar con la Base de Datos MySQL cuando regrese el internet
-                if (window.OfflineManager) {
-                    window.OfflineManager.saveOrder(newOrder);
-                }
-
-                // También lo guarda localmente en "my_orders" por si tu vista lo usa
-                let ordersAdd = JSON.parse(localStorage.getItem("my_orders")) || [];
-                ordersAdd.unshift(newOrder);
-                localStorage.setItem("my_orders", JSON.stringify(ordersAdd));
-
-                alert("⚠️ Sin conexión. El pedido ha sido guardado localmente y se enviará automáticamente al recuperar internet.");
-
-                // Limpiamos el carrito en pantalla y NO redirigimos para evitar el error del dinosaurio
-                cart = [];
-                updateCartUI();
-                return;
-            }
-
-            // CASO 2: CON CONEXIÓN A INTERNET (Proceso normal)
-            if (window.OfflineManager) {
-                window.OfflineManager.saveOrder(newOrder);
-                window.OfflineManager.syncOrders(); // Sincroniza directamente con el controlador
-            }
-
+            const activeOrderId = localStorage.getItem("active_order_id");
             let ordersAdd = JSON.parse(localStorage.getItem("my_orders")) || [];
-            ordersAdd.unshift(newOrder);
+
+            if (activeOrderId) {
+                const index = ordersAdd.findIndex(
+                    (p) => String(p.id) === String(activeOrderId),
+                );
+                if (index !== -1) {
+                    ordersAdd[index].mesa = `Mesa ${mesaValue}`.replace(
+                        "Mesa Mesa ",
+                        "Mesa ",
+                    );
+                    ordersAdd[index].usuario = usuarioValue;
+                    ordersAdd[index].preparacion = prepValue;
+                    ordersAdd[index].productos = [...cart];
+                    ordersAdd[index].total = cart.reduce(
+                        (acc, item) => acc + item.price * item.quantity,
+                        0,
+                    );
+                }
+            } else {
+                const newOrder = {
+                    id: Date.now(),
+                    mesa: `Mesa ${mesaValue}`.replace("Mesa Mesa ", "Mesa "),
+                    usuario: usuarioValue,
+                    preparacion: prepValue,
+                    productos: [...cart],
+                    total: cart.reduce(
+                        (acc, item) => acc + item.price * item.quantity,
+                        0,
+                    ),
+                    tiempo: "Hace un momento",
+                };
+                ordersAdd.unshift(newOrder);
+            }
+
             localStorage.setItem("my_orders", JSON.stringify(ordersAdd));
+            localStorage.removeItem("active_order_id");
 
             cart = [];
             updateCartUI();
 
-            // Solo redirige si hay internet
             window.location.href = "/orders";
         }
     });

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\Order;
 
 class OfflineSyncController extends Controller
 {
@@ -25,12 +25,9 @@ class OfflineSyncController extends Controller
                 Order::create([
                     'mesa'              => $orderData['mesa'] ?? 'Sin mesa',
                     'usuario'           => $orderData['usuario'] ?? 'Invitado',
-                    'preparacion'       => $orderData['preparacion'] ?? null, // <--- Agregamos este campo
+                    'preparacion'       => $orderData['preparacion'] ?? null, 
                     'total'             => $orderData['total'] ?? 0,
                     'is_offline_synced' => true,
-                    'created_at'        => isset($orderData['local_timestamp']) 
-                                           ? Carbon::parse($orderData['local_timestamp']) 
-                                           : now(),
                 ]);
             }
 

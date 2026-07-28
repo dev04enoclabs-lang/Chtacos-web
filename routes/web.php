@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OfflineSyncController;
+use App\Http\Controllers\HistoryController;
 
 Route::post('/pedidos/sincronizar', [OfflineSyncController::class, 'sync']);
+Route::get('/history', [HistoryController::class, 'index'])->name('history');
 
 Route::get('/', function () {
     return redirect()->route('menu');
