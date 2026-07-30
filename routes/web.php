@@ -7,16 +7,14 @@ use App\Http\Controllers\OfflineSyncController;
 use App\Http\Controllers\HistoryController;
 
 Route::post('/pedidos/sincronizar', [OfflineSyncController::class, 'sync']);
+Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+Route::post('/checkout/procesar', [CheckoutController::class, 'store']);
 Route::get('/history', [HistoryController::class, 'index'])->name('history');
+
 
 Route::get('/', function () {
     return redirect()->route('menu');
 });
-
-Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-
-Route::post('/checkout/procesar', [CheckoutController::class, 'store']);
-
 Route::get('Carritos', function () {
     return view('cart');
 })->name('cart');
