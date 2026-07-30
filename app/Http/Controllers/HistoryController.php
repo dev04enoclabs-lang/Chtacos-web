@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ComanderDetall;
+use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
-class HistoryController extends controller
+class HistoryController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $historyOrdes = DB::table('comander_detail') 
+        // Carga ansiosa para optimizar consultas a MySQL
+        $historialPedidos = ComanderDetall::with('comander', 'menu')
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('history', compact('historyOrdes'));
+        return view('history', compact('historialPedidos'));
     }
 }
