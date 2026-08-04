@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="container mx-auto p-4">
-        <h2 class="text-2xl font-bold mb-4 text-red-800">📜 Historial de Pedidos</h2>
+        <h2 class="text-2xl font-bold mb-4 text-red-800">Historial de Pedidos</h2>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow-md p-4">
             <table class="min-w-full divide-y divide-gray-200">
