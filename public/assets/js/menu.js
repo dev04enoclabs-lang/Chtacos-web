@@ -11,6 +11,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectUsuario = document.getElementById("select-usuario");
     const selectPreparacion = document.getElementById("select-preparacion");
 
+    // Elementos del Modal
+    const customModal = document.getElementById("custom-modal");
+    const modalMessage = document.getElementById("modal-message");
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+
+    /**
+     * Muestra el modal personalizado con un mensaje específico 🌮
+     */
+    function mostrarModal(mensaje) {
+        if (customModal && modalMessage) {
+            modalMessage.textContent = mensaje;
+            customModal.classList.remove("hidden");
+        }
+    }
+
+    /**
+     * Oculta el modal personalizado 🙈
+     */
+    function ocultarModal() {
+        if (customModal) {
+            customModal.classList.add("hidden");
+        }
+    }
+
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener("click", ocultarModal);
+    }
+
     if (mesaUrl && selectMesa) {
         selectMesa.value = mesaUrl;
         if (!selectMesa.value) {
@@ -49,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (orderIdUrl) {
         localStorage.setItem("active_order_id", orderIdUrl);
 
-        // Bloquear los selects de mesa y usuario para evitar que los cambien
         if (selectMesa) selectMesa.disabled = true;
         if (selectUsuario) selectUsuario.disabled = true;
 
@@ -75,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 1. SECCIÓN: FILTRADO DE CATEGORÍAS (PRODUCTOS)
+    // 1. SECCIÓN: FILTRADO DE CATEGORÍAS
     // ==========================================
     const buttons = document.querySelectorAll("#category-filters button");
     const products = document.querySelectorAll(".product-card");
@@ -112,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "text-on-surface-variant",
                 "hover:bg-surface-container-high",
             );
+
             let visibleCount = 0;
 
             products.forEach((product) => {
@@ -147,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 2. SECCIÓN: CARRITO / MODAL DE PRODUCTOS Y SELECTORES
+    // 2. SECCIÓN: CARRITO Y EVENTOS
     // ==========================================
     const cartContainer = document.getElementById("cart-modal-container");
     const totalPriceEl = document.getElementById("cart-total-price");
@@ -249,29 +277,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // ==========================================
-        // 3. CONFIRMAR PEDIDO (ACTUALIZAR O CREAR)
-        // ==========================================
+        // Confirmar su pedido y captura de requesitos paar guardar la orden
         const confirmBtn = e.target.closest("#btn-confirm-order");
         if (confirmBtn) {
-            const mesaValue = selectMesa.value;
-            const usuarioValue = selectUsuario.value;
-            const prepValue = selectPreparacion.value;
+            const mesaValue = selectMesa ? selectMesa.value : "";
+            const usuarioValue = selectUsuario ? selectUsuario.value : "";
+            const prepValue = selectPreparacion ? selectPreparacion.value : "";
 
             if (!mesaValue) {
-                alert("Por favor selecciona una Mesa.");
+                mostrarModal("Por favor selecciona una Mesa.");
                 return;
             }
             if (!usuarioValue) {
-                alert("Por favor selecciona un Usuario.");
+                mostrarModal("Por favor selecciona un Usuario.");
                 return;
             }
             if (!prepValue) {
-                alert("Por favor selecciona la Preparación.");
+                mostrarModal("Por favor selecciona la Preparación.");
                 return;
             }
             if (cart.length === 0) {
-                alert("Tu orden está vacía. Agrega al menos un producto.");
+                mostrarModal(
+                    "Tu orden está vacía. Agrega al menos un producto.",
+                );
                 return;
             }
 

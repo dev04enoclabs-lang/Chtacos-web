@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("tailwind-ready");
 
-    // Efectos visuales de botones e inputs
+    // 🎨 Efectos visuales de botones e inputs
     document.querySelectorAll("button").forEach((button) => {
         button.addEventListener("mousedown", () =>
             button.classList.add("scale-95"),
@@ -32,12 +32,47 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectMesaCart = document.getElementById("cart-table-select");
     const cartTableTitle = document.getElementById("cart-table-title");
 
-    // Selectores del resumen alineados con los IDs del Blade
+    const saleModal = document.getElementById("sale-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMessage = document.getElementById("modal-message");
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+
+    let modalCloseCallback = null;
+
+
+    function showModal(title, message, isSuccess = true, onClose = null) {
+        if (!saleModal) return;
+
+        if (modalTitle) modalTitle.textContent = title;
+        if (modalMessage) modalMessage.textContent = message;
+
+        if (modalCloseBtn) {
+            if (isSuccess) {
+                modalCloseBtn.className =
+                    "w-full bg-green-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-green-700 transition-colors";
+            } else {
+                modalCloseBtn.className =
+                    "w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-red-700 transition-colors";
+            }
+        }
+
+        modalCloseCallback = onClose;
+        saleModal.classList.remove("hidden");
+    }
+
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener("click", () => {
+            if (saleModal) saleModal.classList.add("hidden");
+            if (typeof modalCloseCallback === "function") {
+                modalCloseCallback();
+                modalCloseCallback = null;
+            }
+        });
+    }
+
     const summaryMesaUsuario = document.getElementById("summary-table-user");
     const summaryModoPago = document.getElementById("summary-payment-mode");
-    const summaryArticulosCount = document.getElementById(
-        "summary-items-count",
-    );
+    const summaryArticulosCount = document.getElementById("summary-items-count");
     const summaryArticulosTotal = document.getElementById("summary-subtotal");
     const totalFinalElem = document.getElementById("summary-total");
     const btnCheckout =
@@ -94,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
             }
-            updateSummaryView(0, 0, 0, paymentType, []);
+            updateSummaryView(0, 0, 0, paymentType);
             return;
         }
 
@@ -238,7 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Evento de selección individual por tarjeta
     document.addEventListener("click", (e) => {
         const activeRadio = document.querySelector(
             "input[name='tipo_pago']:checked",
@@ -263,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Evento del botón de Pago para guardar en Base de Datos y Enviar el Correo
     if (btnCheckout) {
         btnCheckout.addEventListener("click", async () => {
             const activeRadio = document.querySelector(
@@ -308,7 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Capturamos el nombre y el correo ingresados en tu vista
             const inputNombreCliente =
                 document.getElementById("name_customer") ||
                 document.getElementById("input-nombre-cliente");
@@ -348,11 +380,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const resultado = await response.json();
 
                 if (!resultado.success) {
-                    alert("Error al procesar la venta: " + resultado.message);
+                    showModal(
+                        "Error al Procesar",
+                        resultado.message || "Ocurrió un inconveniente con el registro.",
+                        false
+                    );
                     return;
                 }
 
-                // Cambiar estado visual del botón a Completado
                 btnCheckout.setAttribute("disabled", "true");
                 btnCheckout.classList.remove(
                     "bg-primary",
@@ -384,15 +419,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     JSON.stringify(pedidosGuardados),
                 );
 
-                setTimeout(() => {
-                    alert(
-                        "¡Venta registrada con éxito y ticket enviado al correo del cliente!",
-                    );
-                    window.location.reload();
-                }, 1200);
+                showModal(
+                    "¡Pago exitoso!",
+                    "¡Venta registrada con éxito y ticket enviado al WhatsApp del cliente!",
+                    true,
+                    () => {
+                        window.location.reload();
+                    }
+                );
+
             } catch (error) {
                 console.error("Error en la petición:", error);
-                alert("Ocurrió un error de red al procesar el pago.");
+                showModal(
+                    "Error de Conexión",
+                    "Ocurrió un error de red al procesar el pago.",
+                    false
+                );
             }
         });
     }

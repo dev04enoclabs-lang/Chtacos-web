@@ -40,10 +40,8 @@
                                 <option value="2">Mesa 2</option>
                                 <option value="3">Mesa 3</option>
                             </select>
-                            <span
-                                class="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface">
-                                expand_more
-                            </span>
+                            <i
+                                class="fas fa-chevron-down text-sm absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface"></i>
                         </div>
                     </div>
                 </section>
@@ -80,33 +78,6 @@
                     <div id="cart-orders-container" class="space-y-4"></div>
                 </section>
             </div>
-
-            <div class="bg-surface-container p-6 md:p-8 rounded-xl space-y-6">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary" data-icon="person">person</span>
-                    <h3 class="font-headline-md text-headline-md">Datos del Pedido</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="font-label-lg text-on-surface-variant" for="name_customer">Nombre Completo</label>
-                        <input
-                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md text-on-surface"
-                            id="name_customer" placeholder="Ej. Juan Pérez" type="text"
-                            value="{{ auth()->user()->name ?? '' }}">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="font-label-lg text-on-surface-variant" for="email">Correo Electrónico</label>
-                        <input
-                            class="w-full bg-transparent border-b-2 border-outline-variant focus:border-secondary outline-none py-2 transition-colors font-body-md text-on-surface"
-                            id="email" placeholder="juan@ejemplo.com" type="email"
-                            value="{{ auth()->user()->email ?? '' }}">
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Te enviaremos el ticket y el estado
-                        de tu pedido a este correo.</p>
-                </div>
-            </div>
         </div>
 
         <aside class="lg:col-span-4">
@@ -140,21 +111,35 @@
                     <div class="space-y-3">
                         <button
                             class="w-full bg-primary text-on-primary font-label-lg py-4 rounded-full shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-money-bill-wave"></i>
                             Pago en Efectivo
-                            <span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                            <i class="fas fa-check-circle"></i>
                         </button>
+
                         <button
-                            class="w-full md:hidden border-2 border-primary text-primary font-label-lg py-4 rounded-full hover:bg-primary-container active:scale-[0.98] transition-all">
+                            class="w-full md:hidden border-2 border-primary text-primary font-label-lg py-4 rounded-full hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-credit-card"></i>
                             Pago por tarjeta
                         </button>
                     </div>
+
                     <div class="mt-6 flex items-center justify-center gap-4 opacity-60">
-                        <span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                        <i class="fas fa-lock text-sm"></i>
                         <span class="text-[12px] font-label-lg uppercase tracking-widest">Pago Seguro</span>
                     </div>
                 </div>
             </div>
         </aside>
+    </div>
+    <div id="sale-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-xl transform transition-all">
+            <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-2">Estado de pago</h3>
+            <p id="modal-message" class="text-sm text-gray-600 mb-6"></p>
+            <button id="modal-close-btn"
+                class="w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-red-700 transition-colors">
+                Aceptar
+            </button>
+        </div>
     </div>
 @endsection
 
