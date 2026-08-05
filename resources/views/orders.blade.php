@@ -14,10 +14,8 @@
                 class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
 
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
-                        <span class="material-symbols-outlined text-on-secondary-container"
-                            style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
-                    </div>
+                    <i
+                        class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                     <div>
                         <h2 class="font-headline-md text-headline-md text-on-surface" id="order-table-title">Mesa 1</h2>
                     </div>
@@ -35,10 +33,8 @@
                         <option value="6">Llevar-1</option>
                         <option value="7">Llevar-2</option>
                     </select>
-                    <span
-                        class="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface">
-                        expand_more
-                    </span>
+                    <i
+                        class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                 </div>
             </div>
         </section>
@@ -55,7 +51,7 @@
             </div>
             <a href="{{ route('cart') }}" id="btn-account"
                 class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline-md flex items-center justify-center gap-3 shadow-lg hover:bg-surface-tint transition-all active:scale-95 duration-100">
-                <span class="material-symbols-outlined">payments</span>
+                <span class="fas fa-money-bill-wave"></span>
                 Pedir la Cuenta
             </a>
         </div>

@@ -22,7 +22,8 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
                     <div class="relative z-20 h-full flex flex-col justify-center p-6 text-white max-w-lg">
                         <h2 class="font-headline-xl text-headline-xl mb-1">El auténtico sabor</h2>
-                        <p class="font-body-lg text-body-lg text-primary-fixed opacity-90">Ingredientes frescos, recetas tradicionales</p>
+                        <p class="font-body-lg text-body-lg text-primary-fixed opacity-90">Ingredientes frescos, recetas
+                            tradicionales</p>
                     </div>
                 </div>
             </section>
@@ -30,7 +31,7 @@
             <!-- Filtros Superiores: Mesa, Usuario, Preparación -->
             <section class="bg-surface-container-lowest p-4 md:p-6 rounded-2xl shadow-sm border border-outline-variant/30">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    
+
                     <!-- Mesa -->
                     <div class="flex flex-col w-full">
                         <label class="block font-label-lg text-label-lg text-on-surface-variant mb-2">Mesa</label>
@@ -47,7 +48,8 @@
                                 <option value="Mesa 6">Llevar-1</option>
                                 <option value="Mesa 7">LLevar-2</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
+                            <i
+                                class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                         </div>
                     </div>
 
@@ -65,7 +67,8 @@
                                 <option value="Niño">Niño</option>
                                 <option value="Niña">Niña</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
+                            <i
+                                class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                         </div>
                     </div>
 
@@ -84,7 +87,8 @@
                                 <option value="C/Cebolla Asada">C/Cebolla Asada</option>
                                 <option value="C/Cilantro y Cebolla Azada">C/Cilantro y Cebolla Azada</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
+                            <i
+                                class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                         </div>
                     </div>
 
@@ -108,20 +112,20 @@
 
             <!-- Contenido Principal: Productos y Panel Sticky 'Tu Orden' -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start relative">
-                
+
                 <!-- Grid de Productos: 2 columnas en celular (grid-cols-2), 3 en desktop (lg:grid-cols-3) -->
                 <div class="lg:col-span-2">
                     <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                         @foreach ($products as $product)
                             @php
-                                $catName = $product->categoria
-                                    ? $product->categoria->category_name
-                                    : 'sin-categoria';
+                                $catName = $product->categoria ? $product->categoria->category_name : 'sin-categoria';
                             @endphp
                             <div class="product-card" data-category="{{ \Illuminate\Support\Str::slug($catName) }}">
-                                <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-all duration-300 active:scale-[0.98] cursor-pointer flex flex-col h-[340px] md:h-[380px] border border-outline/10">
+                                <div
+                                    class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] group transition-all duration-300 active:scale-[0.98] cursor-pointer flex flex-col h-[340px] md:h-[380px] border border-outline/10">
 
-                                    <div class="h-[120px] md:h-[160px] w-full overflow-hidden relative bg-surface-container-high">
+                                    <div
+                                        class="h-[120px] md:h-[160px] w-full overflow-hidden relative bg-surface-container-high">
                                         <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                             src="{{ $product->imagen_ruta ? asset($product->imagen_ruta) : asset('assets/img/loading.jpg') }}"
                                             alt="{{ $product->name }}">
@@ -129,10 +133,12 @@
 
                                     <div class="p-2.5 md:p-4 flex flex-col justify-between flex-grow">
                                         <div>
-                                            <h3 class="font-headline-md text-sm md:text-base font-bold text-on-surface truncate">
+                                            <h3
+                                                class="font-headline-md text-sm md:text-base font-bold text-on-surface truncate">
                                                 {{ $product->name }}
                                             </h3>
-                                            <p class="font-body-md text-xs md:text-sm text-on-surface-variant line-clamp-2 md:line-clamp-3 mt-1 leading-relaxed">
+                                            <p
+                                                class="font-body-md text-xs md:text-sm text-on-surface-variant line-clamp-2 md:line-clamp-3 mt-1 leading-relaxed">
                                                 {{ $product->description ?? 'Sin descripción disponible.' }}
                                             </p>
                                         </div>
@@ -140,11 +146,13 @@
                                             <span class="font-price-display text-secondary font-bold text-base md:text-xl">
                                                 ${{ number_format($product->price, 2) }}
                                             </span>
-                                            <button class="relative w-8 h-8 md:w-10 md:h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
+                                            <button
+                                                class="relative w-8 h-8 md:w-10 md:h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
                                                 data-action="add-to-cart" data-id="{{ $product->id }}"
                                                 data-name="{{ $product->name }}">
                                                 <i class="fas fa-plus text-xs md:text-lg"></i>
-                                                <span class="product-qty-badge hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] md:text-xs font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
+                                                <span
+                                                    class="product-qty-badge hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] md:text-xs font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
                                             </button>
                                         </div>
                                     </div>
@@ -169,7 +177,7 @@
 
                         <!-- Resumen de Mesa, Usuario y Preparación -->
                         <div id="order-meta-summary"
-                            class="hidden mb-4 p-3 bg-surface-container-high rounded-xl text-xs space-y-1 text-on-surface-variant border border-outline-variant/50">
+                            class="hidden mb-6 p-3 bg-surface-container-high rounded-xl text-xs space-y-1 text-on-surface-variant border border-outline-variant/50">
                             <p><strong>Mesa:</strong> <span id="summary-mesa">-</span></p>
                             <p><strong>Usuario:</strong> <span id="summary-usuario">-</span></p>
                             <p><strong>Preparación:</strong> <span id="summary-prep">-</span></p>
@@ -178,18 +186,21 @@
                         <!-- Lista del Carrito -->
                         <div class="space-y-4 max-h-[300px] md:max-h-[380px] overflow-y-auto mb-4 no-scrollbar">
                             <div id="cart-modal-container" class="space-y-4">
-                                <p class="text-center text-xs text-on-surface-variant py-4">No hay productos en la orden</p>
+                                <p class="text-center text-xs text-on-surface-variant py-4">No hay productos en la orden
+                                </p>
                             </div>
                         </div>
 
                         <div class="border-t-2 border-dashed border-outline-variant pt-4 space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="font-headline-md text-headline-md">Total</span>
-                                <span id="cart-total-price" class="font-headline-md text-headline-md text-primary font-bold">$0.00</span>
+                                <span id="cart-total-price"
+                                    class="font-headline-md text-headline-md text-primary font-bold">$0.00</span>
                             </div>
                             <button id="btn-confirm-order"
                                 class="w-full bg-primary text-on-primary font-label-lg py-3.5 rounded-xl shadow-lg hover:bg-primary-container active:scale-95 transition-all font-semibold">
-                                Confirmar Pedido
+                                <i class="fas fa-credit-card"></i> Confirmar Pedido
+
                             </button>
                         </div>
                     </div>
