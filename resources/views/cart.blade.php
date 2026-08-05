@@ -117,7 +117,7 @@
                     <div class="space-y-3">
                         <button
                             class="w-full bg-primary text-on-primary font-label-lg py-4 rounded-full shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-money-bill-wave"></i>
+                            <i class="fas fa-shopping-cart"></i>
                             Pago en Efectivo
                             <i class="fas fa-check-circle"></i>
                         </button>
