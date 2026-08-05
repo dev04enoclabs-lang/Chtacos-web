@@ -30,6 +30,10 @@
                         <option value="1">Mesa 1</option>
                         <option value="2">Mesa 2</option>
                         <option value="3">Mesa 3</option>
+                        <option value="4">Mesa 4</option>
+                        <option value="5">Mesa 5</option>
+                        <option value="6">Llevar-1</option>
+                        <option value="7">Llevar-2</option>
                     </select>
                     <span
                         class="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface">
