@@ -35,7 +35,10 @@
                     Ch'Tacos
                 </h1>
             </div>
+
             <div class="flex items-center gap-3">
+                <h2 class="text-1xl font-bold text-black drop-shadow-sm"> Usuario:
+                    {{ (auth()->user()->name ?? 'Invitado') . ' ' . (auth()->user()->last_name ?? '') }}</h2>
                 <!-- Menú de tres puntos (Dropdown) -->
                 <div class="relative">
                     <button id="btn-options-menu" type="button"
@@ -96,7 +99,6 @@
         }
     </script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/js/offiline-menager.js') }}"></script>
     <script src="{{ asset('assets/js/tallwind-config.js') }}"></script>
     @stack('scripts')
 </body>

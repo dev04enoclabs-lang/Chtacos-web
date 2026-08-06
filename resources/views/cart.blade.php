@@ -92,22 +92,22 @@
                     <h3 class="font-headline-md text-headline-md mb-6">Resumen</h3>
                     <div class="space-y-4 mb-8">
                         <div class="flex justify-between items-center text-on-surface-variant">
-                            <span class="font-body-md">Mesa / Usuario</span>
-                            <span class="font-label-lg" id="summary-table-user">Mesa 1 / Juan P.</span>
+                            <span class="font-body-md">Mesa / Usuario:</span>
+                            <span class="font-label-lg" id="summary-table-user"></span>
                         </div>
                         <div class="flex justify-between items-center text-on-surface-variant">
-                            <span class="font-body-md">Modo de Pago</span>
-                            <span class="font-label-lg" id="summary-payment-mode">Individual</span>
+                            <span class="font-body-md">Modo de Pago:</span>
+                            <span class="font-label-lg" id="summary-payment-mode"></span>
                         </div>
                         <div class="h-px bg-outline-variant my-2"></div>
                         <div class="flex justify-between items-center text-on-surface-variant">
                             <span class="font-body-md" id="summary-items-count">Tus artículos (0)</span>
-                            <span class="font-label-lg" id="summary-subtotal">$0.00</span>
+                            <span class="font-label-lg" id="summary-subtotal"></span>
                         </div>
-                        <div class="flex justify-between items-center text-on-surface-variant">
+                        {{-- <div class="flex justify-between items-center text-on-surface-variant">
                             <span class="font-body-md">Envío / Servicio</span>
                             <span class="font-label-lg text-tertiary">GRATIS</span>
-                        </div>
+                        </div> --}}
                         <div class="h-px bg-outline-variant my-4"></div>
                         <div class="flex justify-between items-center">
                             <span class="font-headline-md text-headline-md">Tu Total</span>

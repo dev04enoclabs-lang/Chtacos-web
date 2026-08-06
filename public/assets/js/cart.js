@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const inputs = document.querySelectorAll("input");
     inputs.forEach((input) => {
-        const label = input.parentElement.querySelector("label");
+        const label = input.parentElement?.querySelector("label");
         if (label) {
             input.addEventListener("focus", () => {
                 label.style.color = "#8e4e14";
@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalCloseBtn = document.getElementById("modal-close-btn");
 
     let modalCloseCallback = null;
-
 
     function showModal(title, message, isSuccess = true, onClose = null) {
         if (!saleModal) return;
@@ -72,7 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const summaryMesaUsuario = document.getElementById("summary-table-user");
     const summaryModoPago = document.getElementById("summary-payment-mode");
-    const summaryArticulosCount = document.getElementById("summary-items-count");
+    const summaryArticulosCount = document.getElementById(
+        "summary-items-count",
+    );
     const summaryArticulosTotal = document.getElementById("summary-subtotal");
     const totalFinalElem = document.getElementById("summary-total");
     const btnCheckout =
@@ -83,19 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
         "input[name='tipo_pago']",
     );
 
-    if (pedidosGuardados.length === 0) {
-        if (cartContainer) {
-            cartContainer.innerHTML = `<p class="text-center text-on-surface-variant py-8">No hay pedidos registrados todavía.</p>`;
-        }
-        return;
-    }
-
     let mesaActual =
         selectMesaCart && selectMesaCart.value && selectMesaCart.value !== "0"
             ? `Mesa ${selectMesaCart.value}`
-            : pedidosGuardados[0].mesa || "Mesa 1";
+            : pedidosGuardados.length > 0
+              ? pedidosGuardados[0].mesa
+              : "Mesa 1";
 
-    if (selectMesaCart) {
+    if (selectMesaCart && mesaActual) {
         selectMesaCart.value = mesaActual.replace("Mesa ", "");
     }
     if (cartTableTitle) {
@@ -273,6 +269,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Function de select para pedidos vacios 
+    function updateTableSelectStatus() {
+        const tableSelect = document.getElementById("cart-table-select");
+        if (!tableSelect) return;
+
+        const pedidosActuales =
+            JSON.parse(localStorage.getItem("my_orders")) || [];
+
+        Array.from(tableSelect.options).forEach((option) => {
+            if (option.hidden || option.value === "0") return;
+
+            const nombreMesaOption = option.textContent.trim().toLowerCase();
+
+            const tienePedido = pedidosActuales.some(
+                (pedido) =>
+                    String(pedido.mesa).trim().toLowerCase() ===
+                    nombreMesaOption,
+            );
+
+            if (tienePedido) {
+                option.disabled = false;
+                option.style.color = "#16a34a"; // Verde 
+                option.style.fontWeight = "bold";
+            } else {
+                option.disabled = true;
+                option.style.color = "#dc2626"; // Rojo 
+                option.style.fontWeight = "normal";
+            }
+        });
+    }
+
     document.addEventListener("click", (e) => {
         const activeRadio = document.querySelector(
             "input[name='tipo_pago']:checked",
@@ -382,8 +409,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!resultado.success) {
                     showModal(
                         "Error al Procesar",
-                        resultado.message || "Ocurrió un inconveniente con el registro.",
-                        false
+                        resultado.message ||
+                            "Ocurrió un inconveniente con el registro.",
+                        false,
                     );
                     return;
                 }
@@ -419,21 +447,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     JSON.stringify(pedidosGuardados),
                 );
 
+                // ⚡ Invocación de actualización de select al modificar el localStorage
+                updateTableSelectStatus();
+
                 showModal(
                     "¡Pago exitoso!",
                     "¡Venta registrada con éxito y ticket enviado al WhatsApp del cliente!",
                     true,
                     () => {
                         window.location.reload();
-                    }
+                    },
                 );
-
             } catch (error) {
                 console.error("Error en la petición:", error);
                 showModal(
                     "Error de Conexión",
                     "Ocurrió un error de red al procesar el pago.",
-                    false
+                    false,
                 );
             }
         });
@@ -457,5 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Invoaciones de functiones iniciales
     renderCartSummary();
+    updateTableSelectStatus();
 });

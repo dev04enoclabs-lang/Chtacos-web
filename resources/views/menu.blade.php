@@ -15,16 +15,45 @@
 
             <!-- Banner Principal -->
             <section class="py-2">
-                <div class="relative w-full h-48 md:h-64 rounded-xl overflow-hidden bg-primary-container shadow-lg">
-                    <div class="absolute inset-0 z-0 bg-cover bg-center"
-                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCI2gOQzpT64-tc0nQueMwQbmasMRiw2bEOUAKf6BPmlqxAniv1i2Fd6C9EygVw5LFXDVHfe2dLRhB82vlk6Mx_30emZ5jXuPFBSTblg3ZI2r_DFSaidLV--qZt01eyG3vZ0_SlBVv-7IeVYWBS_NRBZmFMIUrahEZcjReQpf5nkeSYYac06GmZ5Bc4wUNHeVoOm-qSgSDowxZ8frW2RWEDSiU0LP83v-UfoWGz3bJ1qA8Z0rLuS5t1lA')">
+                <div class="relative w-full h-48 md:h-64 rounded-xl overflow-hidden bg-primary-container shadow-lg group">
+
+                    <div class="absolute inset-0 z-0 overflow-hidden">
+                        <div id="infiniteCarouselTrack" class="animate-carousel h-full">
+
+                            <div class="flex w-1/2 h-full shrink-0">
+                                <img src="{{ asset('assets/img/agua-skarch.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 1">
+                                <img src="{{ asset('assets/img/bistec.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 2">
+                                <img src="{{ asset('assets/img/campechano.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 3">
+                            </div>
+
+                            <div class="flex w-1/2 h-full shrink-0">
+                                <img src="{{ asset('assets/img/agua-skarch.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 1">
+                                <img src="{{ asset('assets/img/bistec.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 2">
+                                <img src="{{ asset('assets/img/campechano.jpg') }}" class="w-1/3 h-full object-cover"
+                                    alt="Banner 3">
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
-                    <div class="relative z-20 h-full flex flex-col justify-center p-6 text-white max-w-lg">
+
+                    <!-- Capa 1: Degradado protector de lectura (z-10) -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-10 pointer-events-none">
+                    </div>
+
+                    <!-- Capa 2: Contenido de Texto (z-20) -->
+                    <div
+                        class="relative z-20 h-full flex flex-col justify-center p-6 text-white max-w-lg pointer-events-none">
                         <h2 class="font-headline-xl text-headline-xl mb-1">El auténtico sabor</h2>
                         <p class="font-body-lg text-body-lg text-primary-fixed opacity-90">Ingredientes frescos, recetas
                             tradicionales</p>
                     </div>
+
                 </div>
             </section>
 
