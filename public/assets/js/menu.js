@@ -414,4 +414,31 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    // Carrusel de img
+
+    const carouselTrack = document.getElementById("infiniteCarouselTrack");
+    let isPaused = false;
+
+    if (carouselTrack) {
+        carouselTrack.addEventListener("mouseenter", () => {
+            carouselTrack.classList.add("is-paused");
+            isPaused = true;
+        });
+
+        carouselTrack.addEventListener("mouseleave", () => {
+            carouselTrack.classList.remove("is-paused");
+            isPaused = false;
+        });
+
+        // Para dispositivos táctiles
+        carouselTrack.addEventListener("touchstart", () => {
+            carouselTrack.classList.add("is-paused");
+            isPaused = true;
+        });
+
+        carouselTrack.addEventListener("touchend", () => {
+            carouselTrack.classList.remove("is-paused");
+            isPaused = false;
+        });
+    }
 });

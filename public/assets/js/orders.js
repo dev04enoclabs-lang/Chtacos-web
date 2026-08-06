@@ -14,15 +14,72 @@ document.addEventListener("DOMContentLoaded", () => {
         tableSelect.value = "1";
     }
 
+    // Actualiza el estado visual (rojo/verde y disabled) de cada mesa en el selector
+    function updateTableSelectStatus() {
+        if (!tableSelect) return;
+
+        const pedidosGuardados =
+            JSON.parse(localStorage.getItem("my_orders")) || [];
+
+        Array.from(tableSelect.options).forEach((option) => {
+            if (option.hidden) return;
+
+            const nombreMesaOption = option.textContent.trim().toLowerCase();
+
+            const tienePedido = pedidosGuardados.some(
+                (pedido) =>
+                    String(pedido.mesa).trim().toLowerCase() ===
+                    nombreMesaOption,
+            );
+
+            if (tienePedido) {
+                option.disabled = false;
+                option.style.color = "#16a34a"; // Verde
+                option.style.fontWeight = "bold";
+            } else {
+                option.disabled = true;
+                option.style.color = "#dc2626"; // Rojo
+                option.style.fontWeight = "normal";
+            }
+        });
+    }
+
     function renderOrders() {
         const pedidosGuardados =
             JSON.parse(localStorage.getItem("my_orders")) || [];
+
+        // 1. Validar si la mesa actual tiene pedidos activos
+        const tienePedidosMesaActual = pedidosGuardados.some(
+            (p) =>
+                String(p.mesa).trim().toLowerCase() ===
+                String(mesaActual).trim().toLowerCase(),
+        );
+
+        if (!tienePedidosMesaActual && pedidosGuardados.length > 0) {
+            const mesaConPedido = pedidosGuardados.find((p) => p.mesa);
+            if (mesaConPedido) {
+                mesaActual = mesaConPedido.mesa;
+
+                if (tableSelect) {
+                    const optionMatch = Array.from(tableSelect.options).find(
+                        (opt) =>
+                            opt.textContent.trim().toLowerCase() ===
+                            mesaActual.trim().toLowerCase(),
+                    );
+                    if (optionMatch) {
+                        tableSelect.value = optionMatch.value;
+                    }
+                }
+            }
+        }
 
         const pedidosFiltrados = pedidosGuardados.filter(
             (pedido) =>
                 String(pedido.mesa).trim().toLowerCase() ===
                 String(mesaActual).trim().toLowerCase(),
         );
+
+        updateTableSelectStatus();
 
         if (tableTitle) {
             tableTitle.textContent = mesaActual;
@@ -129,11 +186,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ordersContainer.innerHTML = html;
     }
 
-    // Escuchar el cambio en el selector de mesas de la vista de pedidos
+    // Listener corregido para cambio de mesa
     if (tableSelect) {
-        tableSelect.addEventListener("change", (e) => {
-            mesaActual = `Mesa ${e.target.value}`;
-            renderOrders();
+        tableSelect.addEventListener("change", () => {
+            const selectedOption =
+                tableSelect.options[tableSelect.selectedIndex];
+            if (selectedOption) {
+                mesaActual = selectedOption.textContent.trim();
+                renderOrders();
+            }
         });
     }
 
@@ -141,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let pedidosGuardados =
             JSON.parse(localStorage.getItem("my_orders")) || [];
 
+        // Eliminar pedido completo
         const deleteBtn = e.target.closest(".btn-delete-order");
         if (deleteBtn) {
             const id = Number(deleteBtn.getAttribute("data-id"));
@@ -154,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Incrementar cantidad
         const plusBtn = e.target.closest(".order-btn-plus");
         if (plusBtn) {
             const orderId = Number(plusBtn.getAttribute("data-order-id"));
@@ -174,6 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Decrementar cantidad / eliminar producto
         const minusBtn = e.target.closest(".order-btn-minus");
         if (minusBtn) {
             const orderId = Number(minusBtn.getAttribute("data-order-id"));
@@ -206,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Botón agregar más productos al pedido
         const addMoreBtn = e.target.closest(".btn-add-more");
         if (addMoreBtn) {
             const orderId = Number(addMoreBtn.getAttribute("data-id"));
