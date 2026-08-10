@@ -30,15 +30,6 @@
                     Ch'Tacos
                 </h1>
             </div>
-
-            <div class="flex items-center gap-3">
-                <div class="relative">
-                    <button type="button"
-                        class="p-2 rounded-full hover:bg-surface-container-high transition-colors flex items-center justify-center text-on-surface-variant focus:outline-none">
-                        <i class="fa-solid fa-ellipsis-v"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     </header>
 

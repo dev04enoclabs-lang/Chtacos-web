@@ -59,6 +59,11 @@
                             <i class="fa-solid fa-qrcode text-lg"></i>
                             Qr de Contacto
                         </a>
+                        <a href="{{ route('sales') }}"
+                            class="flex items-center gap-2 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-high transition-colors">
+                            <i class="fa-solid fa-qrcode text-lg"></i>
+                            Ventas
+                        </a>
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
                             <button type="submit"

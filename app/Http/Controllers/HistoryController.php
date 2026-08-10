@@ -11,7 +11,6 @@ class HistoryController extends Controller
 {
     public function index(): View
     {
-        // Carga ansiosa para optimizar consultas a MySQL
         $historialPedidos = ComanderDetall::with('comander', 'menu')
             ->orderBy('id', 'desc')
             ->get();
