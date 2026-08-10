@@ -8,7 +8,7 @@
             <p class="text-2x1 text-on-surface-variant font-medium">Panel de análisis de ventas e ingresos históricos</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
             {{-- Ventas acomuladas por día  --}}
 
@@ -40,10 +40,10 @@
                             <i class="fa-solid fa-chart-line text-[10px]"></i>
                             <span>Ventas acomuladas del dia de Hoy.</span>
                         </p>
-                    </div>
 
-                    <div class="p-3 bg-primary/10 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
-                        <i class="fa-solid fa-bag-shopping text-4xl"></i>
+                    </div>
+                    <div class="p-3 bg-primary/9 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-3xl"></i>
                     </div>
                 </div>
 
@@ -81,8 +81,8 @@
                         </p>
                     </div>
 
-                    <div class="p-3 bg-primary/10 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
-                        <i class="fa-solid fa-bag-shopping text-4xl"></i>
+                    <div class="p-3 bg-primary/9 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-3xl"></i>
                     </div>
                 </div>
             </div>
@@ -118,8 +118,8 @@
                         </p>
                     </div>
 
-                    <div class="p-3 bg-primary/10 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
-                        <i class="fa-solid fa-bag-shopping text-4xl"></i>
+                    <div class="p-3 bg-primary/9 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-3xl"></i>
                     </div>
                 </div>
             </div>
@@ -156,8 +156,8 @@
                         </p>
                     </div>
 
-                    <div class="p-3 bg-primary/10 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
-                        <i class="fa-solid fa-bag-shopping text-4xl"></i>
+                    <div class="p-3 bg-primary/9 rounded-xl text-primary/60 group-hover:text-primary transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-3xl"></i>
                     </div>
                 </div>
 

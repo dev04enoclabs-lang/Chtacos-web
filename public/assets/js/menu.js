@@ -373,15 +373,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div class="flex items-center gap-xs bg-surface-container-highest rounded-full px-2 py-1">
                         <button type="button" class="cart-btn-minus w-6 h-6 rounded-full hover:bg-outline-variant flex items-center justify-center text-on-surface-variant transition-colors" data-id="${item.id}">-</button>
-                        <span class="font-label-lg px-1">${item.quantity}</span>
+                        <input 
+                            type="number" 
+                            inputmode="numeric"
+                            min="1"
+                            max="999999"
+                            maxlength="6"
+                            value="${item.quantity}" 
+                            data-id="${item.id}"
+                            class="cart-qty-input w-16 text-center bg-transparent font-label-lg text-on-surface focus:outline-none rounded [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0"
+                            onkeydown = "if(['e','E','+','-','.',' '].includes(event.key))" event.preventDefault();"
+                            onikeydown = "this.value = this.value.replace(/[^0-9}]/&, '');"
+                            oninput = "if (this.value.length > 6 this.value = this.value.slice(0.6); this.value.replace(/[^0-9])/&, '');"
+                            />
                         <button type="button" class="cart-btn-plus w-6 h-6 rounded-full hover:bg-outline-variant flex items-center justify-center text-on-surface-variant transition-colors" data-id="${item.id}">+</button>
                     </div>
                 </div>
             `;
         });
+        
 
         cartContainer.innerHTML = html;
     }
+    
 
     function updateTotalPrice() {
         if (!totalPriceEl) return;
