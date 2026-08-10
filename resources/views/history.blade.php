@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container mx-auto p-4">
         <h2 class="text-2xl font-bold mb-4 text-red-800">Historial de Pedidos</h2>
 
@@ -11,11 +10,11 @@
                     <tr>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">ID</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Mesa</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium uppercase">Menú ID</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium uppercase">Cliente</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium uppercase">Menú</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Cantidad</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Costo Unitario</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Total</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium uppercase">Cliente</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Fecha</th>
                     </tr>
                 </thead>
@@ -24,14 +23,15 @@
                         <tr>
                             <td class="px-4 py-2 text-sm font-bold">{{ $detalle->comander_id ?? 'Sin ID' }}</td>
                             <td class="px-4 py-2 text-sm">{{ $detalle->comander->mesa ?? 'Sin Mesa' }}</td>
-                            <td class="px-4 py-2 text-sm">{{ $detalle->menu->name ?? 'sin Producto' . $detalle->id_menu }}</td>
-                            <td class="px-4 py-2 text-sm">{{ $detalle->cantidad ?? 'Sin Cantidad'}}</td>
-                            <td class="px-4 py-2 text-sm">${{ number_format($detalle->costo_unitario, 2) ?? 'Sin Costo'}}
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ $detalle->comander->cliente ?? ($detalle->cliente ?? 'Sin Cliente') }}</td>
+                            <td class="px-4 py-2 text-sm">{{ $detalle->menu->name ?? 'sin Producto' . $detalle->id_menu }}
+                            </td>
+                            <td class="px-4 py-2 text-sm">{{ $detalle->cantidad ?? 'Sin Cantidad' }}</td>
+                            <td class="px-4 py-2 text-sm">${{ number_format($detalle->costo_unitario, 2) ?? 'Sin Costo' }}
                             </td>
                             <td class="px-4 py-2 text-sm font-semibold text-red-600">
                                 ${{ number_format($detalle->total, 2) }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                {{ $detalle->comander->cliente ?? $detalle->cliente ?? 'Sin Cliente' }}</td>
                             <td class="px-4 py-2 text-sm text-gray-500">
                                 {{ $detalle->comander && $detalle->comander->create_at ? \Carbon\Carbon::parse($detalle->comander->create_at)->format('d/m/Y H:i') : 'N/A' }}
                             </td>
