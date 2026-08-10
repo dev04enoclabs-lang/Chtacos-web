@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckSessionTimeout;
+use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,9 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'pedidos/sincronizar',
         ]);
 
-        $middleware->web(append: [
-            CheckSessionTimeout::class,
-        ]);
+       $middleware->appendToGroup('web', PreventBackHistory::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
     })->create();

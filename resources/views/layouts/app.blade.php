@@ -53,6 +53,20 @@
                             <i class="fa-solid fa-clock text-lg"></i>
                             Historial
                         </a>
+
+                        <a href="{{ route('codeQr') }}"
+                            class="flex items-center gap-2 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-high transition-colors">
+                            <i class="fa-solid fa-qrcode text-lg"></i>
+                            Qr de Contacto
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            @csrf
+                            <button type="submit"
+                                class="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-high transition-colors text-left">
+                                <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                                Cerrar Sesión
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

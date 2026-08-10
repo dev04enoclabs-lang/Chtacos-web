@@ -10,8 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckSessionTimeout
 {
     /**
+     * 28800 segundo = 8 horas 
+     * 18000 segundos = 5 horas
+     * 600 segundos = 10 minutos}
+     * 300 segundos = 5 minutos
+     * 60 segundos = 1 minuto
      */
-    private const MAX_SESSION_TIME = 28800;// 28800 segundo es = 8 horas 
+    private const MAX_SESSION_TIME = 18000;// Agregar segundos para definir el tiempo de sesion por usuario
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -23,7 +28,8 @@ class CheckSessionTimeout
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return redirect()->route('login')->with('error', 'Tu sesión ha caducado tras 8 horas. Por favor, inicia sesión de nuevo.');
+                $seconds = self::MAX_SESSION_TIME;
+                return redirect()->route('login')->with('error', "Tu sesión ha caducado tras {$seconds} horas. Por favor, inicia sesión de nuevo.");
             }
         }
 

@@ -60,7 +60,7 @@
                 </p>
                 @if (session('error'))
                     <div
-                        class="mb-4 rounded-xl bg-red-50 p-3.5 border border-red-200 text-xs font-semibold text-red-600 flex items-center gap-2">
+                        class="mb-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs font-semibold text-red-600">
                         <i class="fa-solid fa-triangle-exclamation text-sm"></i>
                         <span>{{ session('error') }}</span>
                     </div>
@@ -68,7 +68,7 @@
 
                 @if ($errors->any())
                     <div
-                        class="mb-4 rounded-xl bg-red-50 p-3.5 border border-red-200 text-xs font-semibold text-red-600 flex items-center gap-2">
+                        class="mb-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs font-semibold text-red-600">
                         <i class="fa-solid fa-circle-exclamation text-sm"></i>
                         <span>{{ $errors->first() }}</span>
                     </div>
@@ -85,8 +85,16 @@
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-on-surface">Contraseña</label>
-                        <input type="password" name="password" id="password" required
-                            class="mt-1 block w-full rounded-lg border border-outline-variant bg-surface-container-highest px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary">
+                        <div class="relative mt-1">
+                            <input type="password" name="password" id="password" required
+                                class="block w-full rounded-lg border border-outline-variant bg-surface-container-highest pl-3 pr-10 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary">
+
+                            <button type="button" id="togglePassword"
+                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none"
+                                aria-label="Mostrar u ocultar contraseña">
+                                <i id="toggleIcon" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <button type="submit"
@@ -98,6 +106,7 @@
     </main>
 </body>
 <script src="{{ asset('assets/js/app.js') }}"></script>
+<script src="{{ asset('assets/js/login.js') }}"></script>
 <script src="{{ asset('assets/js/tallwind-config.js') }}"></script>
 
 </html>
