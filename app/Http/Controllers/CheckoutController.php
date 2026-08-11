@@ -14,10 +14,15 @@ class CheckoutController extends Controller
     {
         $productos = $request->input('productos', []);
         $mesa = $request->input('mesa', 'Mesa 1');
-        
+
         // Capturamos el nombre y el correo ingresados por el cliente en el formulario
         $nombreCliente = $request->input('nombre', $request->input('cliente', 'Cliente General'));
         $emailCliente = $request->input('email', null);
+
+        $usuario = auth()->check()
+            ? trim(auth()->user()->name . ' ' . (auth()->user()->last_name ?? ''))
+            : $request->input('usuario_name', 'usuario');
+
 
         if (empty($productos)) {
             return response()->json(['success' => false, 'message' => 'No hay productos para registrar.'], 400);
@@ -27,9 +32,9 @@ class CheckoutController extends Controller
         try {
             // Guardar en la tabla principal comander
             $comanderId = DB::table('comander')->insertGetId([
-                'mesa'    => $mesa,
+                'mesa' => $mesa,
                 'cliente' => $nombreCliente,
-                'email'   => $emailCliente,
+                'email' => $emailCliente,
             ]);
 
             $totalGeneral = 0;
@@ -41,14 +46,14 @@ class CheckoutController extends Controller
                 $totalGeneral += $subtotal;
 
                 DB::table('comander_detall')->insert([
-                    'comander_id'    => $comanderId,
-                    'id_menu'        => $prod['id_menu'] ?? 1, 
-                    'cantidad'       => $prod['quantity'],
+                    'comander_id' => $comanderId,
+                    'id_menu' => $prod['id_menu'] ?? 1,
+                    'cantidad' => $prod['quantity'],
                     'costo_unitario' => $prod['price'],
-                    'total'          => $subtotal,
-                    'cliente'        => $prod['tipo_cliente'] ?? 'Adulto', 
-                    'usuario'        => $nombreCliente,
-                    'email'          => $emailCliente,
+                    'total' => $subtotal,
+                    'cliente' => $prod['tipo_cliente'] ?? 'Adulto',
+                    'usuario' => $usuario,
+                    'email' => $emailCliente,
                 ]);
             }
 
@@ -59,12 +64,12 @@ class CheckoutController extends Controller
                 try {
                     $datosTicket = [
                         'establecimiento' => "Ch'Tacos",
-                        'cliente'         => $nombreCliente,
-                        'email'           => $emailCliente,
-                        'mesa'            => $mesa,
-                        'fecha'           => $fechaHoraVenta,
-                        'productos'       => $productos,
-                        'total'           => $totalGeneral,
+                        'cliente' => $nombreCliente,
+                        'email' => $emailCliente,
+                        'mesa' => $mesa,
+                        'fecha' => $fechaHoraVenta,
+                        'productos' => $productos,
+                        'total' => $totalGeneral,
                     ];
 
                     Mail::to($emailCliente)->send(new TicketPedidoMail($datosTicket));

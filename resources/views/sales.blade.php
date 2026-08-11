@@ -1,11 +1,16 @@
 @extends('layouts.app')
 
+@section('title', "Ch'Tacos - Ventas")
+
 @section('content')
     <div class="container mx-auto p-4 space-y-6">
 
         <div>
-            <h2 class="text-2xl font-bold text-red-800 uppercase tracking-wider">Ventas</h2>
-            <p class="text-2x1 text-on-surface-variant font-medium">Panel de análisis de ventas e ingresos históricos</p>
+            <h1
+                class="text-1xl md:text-3xl font-extrabold tracking-tight text-on-surface dark:text-primary-fixed-dim my-3 flex items-center gap-2">
+                <i class="fas fa-shopping-cart text-primary"></i>
+                Ventas generadas
+            </h1>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -162,6 +167,34 @@
                 </div>
 
             </div>
+
         </div>
+
+        {{-- Ventas generadas por usuario --}}
+        <h1
+            class="text-1xl md:text-3xl font-extrabold tracking-tight text-on-surface dark:text-primary-fixed-dim my-3 flex items-center gap-2">
+            <i class="fa-solid fa-users text-primary"></i>
+            Ventas generadas por Usuario
+        </h1>
+        {{-- Los card de usuario solo se visualizaran si han hecho ventas --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            @foreach ($salesusuario as $sale)
+                <div class="p-4 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant">
+                    <span class="text-3xs font-semibold uppercase tracking-widest text-on-surface-variant/80">
+                        Ventas de: {{ $sale->usuario }}
+                    </span>
+
+                    <h3 class="text-2xl font-extrabold tracking-tight text-on-surface my-1">
+                        ${{ number_format($sale->total_generado, 2) }}
+                    </h3>
+
+                    <p class="text-[11px] font-medium text-black-500 flex items-center gap-1">
+                        <i class="fa-solid fa-chart-line text-[10px]"></i>
+                        <span>{{ $sale->total_ventas }} órdenes realizadas</span>
+                    </p>
+                </div>
+            @endforeach
+        </div>
+
     </div>
 @endsection

@@ -17,7 +17,7 @@
                     <i
                         class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
                     <div>
-                        <h2 class="font-headline-md text-headline-md text-on-surface" id="order-table-title">Mesa 1</h2>
+                        <h2 class="font-headline-md text-headline-md text-on-surface" id="order-table-title">Mesa (1)</h2>
                     </div>
                 </div>
 
