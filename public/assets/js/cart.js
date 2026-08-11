@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalMessage = document.getElementById("modal-message");
     const modalCloseBtn = document.getElementById("modal-close-btn");
 
+    const sellerId = document.querySelector('meta[name="user-id"]')?.getAttribute('content');
+    const sellerName = document.querySelector('meta[name="user-name"]')?.getAttribute('content');
     let modalCloseCallback = null;
 
     function showModal(title, message, isSuccess = true, onClose = null) {
@@ -388,6 +390,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 mesa: mesaActual,
                 nombre: nombreClienteVal,
                 email: emailClienteVal,
+                seller_Id: sellerId,
+                seller_name: sellerName, 
                 productos: productosAProcesar,
             };
 

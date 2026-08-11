@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tableSelect.value = "1";
     }
 
-    // Actualiza el estado visual (rojo/verde y disabled) de cada mesa en el selector
+    // Actualiza el estado visual (rojo/verde) de cada mesa en el selector
     function updateTableSelectStatus() {
         if (!tableSelect) return;
 
@@ -183,6 +183,12 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
+        html += `
+            <button type="button" class="btn-add-client w-full py-2 mb-6 border border-dashed border-orange-500/50 rounded-lg text-orange-600 font-label-lg flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-orange-800 transition-colors" data-mesa="${mesaActual}">
+                <i class="fas fa-address-card"></i> Agregar Clientes
+            </button>
+        `;
+
         ordersContainer.innerHTML = html;
     }
 
@@ -284,6 +290,18 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 window.location.href = "/menu";
             }
+        }
+
+        // Button de agregar clientes
+        const addClientBtn = e.target.closest(".btn-add-client");
+        if (addClientBtn) {
+            const mesaNombre =
+                addClientBtn.getAttribute("data-mesa") || mesaActual;
+            const mesaNum = mesaNombre.replace("Mesa ", "");
+
+            // Redirige al menú fijando la mesa actual pero SIN usuario u order_id
+            // Esto permite seleccionar/escribir un nuevo nombre de cliente
+            window.location.href = `/menu?mesa=${mesaNum}&nuevo_cliente=true`;
         }
     });
 

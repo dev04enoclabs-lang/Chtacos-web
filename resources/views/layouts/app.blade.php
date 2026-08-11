@@ -18,6 +18,9 @@
     </noscript>
 
     @stack('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user-id" content="{{ auth()->id() }}">
+    <meta name="user-name" content="{{ auth()->user()->name ?? 'Invitado' }}">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 </head>
@@ -61,7 +64,7 @@
                         </a>
                         <a href="{{ route('sales') }}"
                             class="flex items-center gap-2 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-high transition-colors">
-                            <i class="fa-solid fa-qrcode text-lg"></i>
+                            <i class="fa-solid fa-bag-shopping text-lg"></i>
                             Ventas
                         </a>
                         <form method="POST" action="{{ route('logout') }}" class="w-full">

@@ -30,21 +30,26 @@ class SalesController extends Controller
         $weeklyOrders = Comander::whereBetween('create_at', [$startOfWeek, $endOfWeek])->count();
 
         // Venta Mensual
-        
+
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
-        $monthlysales = ComanderDetall::whereHas('comander',function ($query) use ($startOfMonth, $endOfMonth){
+        $monthlysales = ComanderDetall::whereHas('comander', function ($query) use ($startOfMonth, $endOfMonth) {
             $query->whereBetween('create_at', [$startOfMonth, $endOfMonth]);
         })->sum('total');
 
         $monthlyorders = Comander::whereBetween('create_at', [$startOfMonth, $endOfMonth])->count();
-        
+
         // Venta Total Acomulado
         $totalSales = ComanderDetall::sum('total');
         $totalOrders = Comander::count();
 
+        // Venta por usuario 
+        $salesusuario = ComanderDetall::selectRaw('usuario as usuario, SUM(total) as total_generado, COUNT(DISTINCT comander_id) as total_ventas')
+            ->groupBy('usuario')
+            ->get();
+
         // Definir las variables para traer las ventas por tiempo
-        return view('sales', compact('todaySales', 'todayOrders', 'weeklySales', 'weeklyOrders', 'monthlysales', 'monthlyorders', 'totalSales', 'totalOrders'));
+        return view('sales', compact('todaySales', 'todayOrders', 'weeklySales', 'weeklyOrders', 'monthlysales', 'monthlyorders', 'totalSales', 'totalOrders', 'salesusuario'));
     }
 }
