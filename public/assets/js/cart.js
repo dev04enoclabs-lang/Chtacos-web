@@ -102,6 +102,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let pedidosSeleccionadosIndividual = new Set();
 
+    window.toggleInputTicket = function (checkbox) {
+        const emailWrap = document.getElementById("campo_email_ticket");
+        const emailInput = document.getElementById("email_ticket");
+
+        if (!emailWrap || !emailInput) return;
+
+        emailWrap.classList.toggle("d-none", !checkbox.checked);
+
+        if (!checkbox.checked) {
+            emailInput.value = "";
+        }
+    };
+
     function renderCartSummary() {
         const activeRadio = document.querySelector(
             "input[name='tipo_pago']:checked",
@@ -375,13 +388,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("input-nombre-cliente");
             const inputEmailCliente =
                 document.getElementById("email_customer") ||
-                document.getElementById("input-email-cliente");
+                document.getElementById("input-email-cliente") ||
+                document.getElementById("email_ticket");
 
             const nombreClienteVal =
                 inputNombreCliente && inputNombreCliente.value.trim() !== ""
-                    ? inputNombreCliente.value
+                    ? inputNombreCliente.value.trim()
                     : "Cliente General";
 
+            const requiereTicket =
+                document.getElementById("requiere_ticket")?.checked || false;
             const emailClienteVal = inputEmailCliente
                 ? inputEmailCliente.value.trim()
                 : "";
@@ -390,27 +406,44 @@ document.addEventListener("DOMContentLoaded", () => {
                 mesa: mesaActual,
                 nombre: nombreClienteVal,
                 email: emailClienteVal,
+                email_ticket: requiereTicket ? emailClienteVal : "",
+                requiere_ticket: requiereTicket,
                 seller_Id: sellerId,
-                seller_name: sellerName, 
+                seller_name: sellerName,
                 productos: productosAProcesar,
             };
+
+            const csrfToken =
+                document
+                    .querySelector('meta[name="csrf-token"]')
+                    ?.getAttribute("content") || "";
 
             try {
                 const response = await fetch("/checkout/procesar", {
                     method: "POST",
+                    credentials: "same-origin",
                     headers: {
+                        Accept: "application/json",
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN":
-                            document
-                                .querySelector('meta[name="csrf-token"]')
-                                ?.getAttribute("content") || "",
+                        "X-CSRF-TOKEN": csrfToken,
+                        "X-Requested-With": "XMLHttpRequest",
                     },
                     body: JSON.stringify(datosVenta),
                 });
 
-                const resultado = await response.json();
+                const text = await response.text();
+                let resultado = {};
 
-                if (!resultado.success) {
+                if (text) {
+                    try {
+                        resultado = JSON.parse(text);
+                    } catch (jsonError) {
+                        console.error("Respuesta JSON inválida:", jsonError, text);
+                        throw new Error("La respuesta del servidor no es un JSON válido.");
+                    }
+                }
+
+                if (!response.ok || !resultado.success) {
                     showModal(
                         "Error al Procesar",
                         resultado.message ||
@@ -430,7 +463,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     "text-white",
                     "cursor-default",
                 );
-                btnCheckout.innerHTML = `¡Pago Exitoso / Ticket Enviado! <span class="material-symbols-outlined">done_all</span>`;
+                btnCheckout.innerHTML = requiereTicket
+                    ? `¡Pago Exitoso / Ticket Enviado! <span class="material-symbols-outlined">done_all</span>`
+                    : `¡Pago Exitoso! <span class="material-symbols-outlined">done_all</span>`;
 
                 if (paymentType === "total") {
                     pedidosGuardados = pedidosGuardados.filter(
@@ -451,12 +486,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     JSON.stringify(pedidosGuardados),
                 );
 
-                // ⚡ Invocación de actualización de select al modificar el localStorage
                 updateTableSelectStatus();
 
                 showModal(
                     "¡Pago exitoso!",
-                    "¡Venta registrada con éxito y ticket enviado al WhatsApp del cliente!",
+                    requiereTicket
+                        ? "¡Venta registrada con éxito y ticket enviado al correo del cliente!"
+                        : "¡Venta registrada con éxito!",
                     true,
                     () => {
                         window.location.reload();
@@ -466,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Error en la petición:", error);
                 showModal(
                     "Error de Conexión",
-                    "Ocurrió un error de red al procesar el pago.",
+                    "Ocurrió un error de red o del servidor al procesar el pago.",
                     false,
                 );
             }

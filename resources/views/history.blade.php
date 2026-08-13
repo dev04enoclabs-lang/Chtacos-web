@@ -11,6 +11,7 @@
                 <thead>
                     <tr>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">ID</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium uppercase">Vendedor</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Mesa</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Cliente</th>
                         <th class="px-4 py-2 text-left text-xs font-medium uppercase">Menú</th>
@@ -24,6 +25,7 @@
                     @forelse($historialPedidos as $detalle)
                         <tr>
                             <td class="px-4 py-2 text-sm font-bold">{{ $detalle->comander_id ?? 'Sin ID' }}</td>
+                            <td class="px-4 py-2 text-sm font-bold">{{ $detalle->usuario ?? 'Sin Usuario' }}</td>
                             <td class="px-4 py-2 text-sm">{{ $detalle->comander->mesa ?? 'Sin Mesa' }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">
                                 {{ $detalle->comander->cliente ?? ($detalle->cliente ?? 'Sin Cliente') }}</td>

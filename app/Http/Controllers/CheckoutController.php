@@ -13,75 +13,119 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {
         $productos = $request->input('productos', []);
-        $mesa = $request->input('mesa', 'Mesa 1');
+        $mesa = trim((string) $request->input('mesa', 'Mesa 1')) ?: 'Mesa 1';
 
-        // Capturamos el nombre y el correo ingresados por el cliente en el formulario
-        $nombreCliente = $request->input('nombre', $request->input('cliente', 'Cliente General'));
-        $emailCliente = $request->input('email', null);
+        $requiereTicket = filter_var($request->input('requiere_ticket', false), FILTER_VALIDATE_BOOLEAN);
+        $emailCliente = $requiereTicket
+            ? trim((string) ($request->input('email_ticket') ?: $request->input('email', '')))
+            : trim((string) ($request->input('email', '')));
+
+        $nombreCliente = trim((string) $request->input('nombre', $request->input('cliente', 'Cliente General')));
+        $nombreCliente = $nombreCliente !== '' ? $nombreCliente : 'Cliente General';
 
         $usuario = auth()->check()
-            ? trim(auth()->user()->name . ' ' . (auth()->user()->last_name ?? ''))
-            : $request->input('usuario_name', 'usuario');
+            ? trim((auth()->user()->name ?? '') . ' ' . (auth()->user()->last_name ?? ''))
+            : trim((string) $request->input('usuario_name', 'usuario'));
 
+        $usuario = $usuario !== '' ? $usuario : 'usuario';
 
-        if (empty($productos)) {
+        if (empty($productos) || !is_array($productos)) {
             return response()->json(['success' => false, 'message' => 'No hay productos para registrar.'], 400);
         }
 
         DB::beginTransaction();
+
         try {
-            // Guardar en la tabla principal comander
             $comanderId = DB::table('comander')->insertGetId([
                 'mesa' => $mesa,
                 'cliente' => $nombreCliente,
-                'email' => $emailCliente,
+                'email' => $emailCliente !== '' ? $emailCliente : null,
             ]);
 
             $totalGeneral = 0;
             $fechaHoraVenta = now()->format('Y-m-d H:i:s');
+            $productosDetalle = [];
 
-            // Guardar detalles del producto
             foreach ($productos as $prod) {
-                $subtotal = $prod['quantity'] * $prod['price'];
+                $precio = isset($prod['price']) ? (float) $prod['price'] : 0;
+                $cantidad = isset($prod['quantity']) ? (int) $prod['quantity'] : 1;
+                $subtotal = $cantidad * $precio;
                 $totalGeneral += $subtotal;
+
+                $productoNombre = $prod['name'] ?? $prod['nombre'] ?? 'Producto no encontrado';
+                $productoId = $prod['id_menu'] ?? $prod['id'] ?? 1;
+
+                $productosDetalle[] = [
+                    'id_menu' => $productoId,
+                    'nombre' => $productoNombre,
+                    'quantity' => $cantidad,
+                    'cantidad' => $cantidad,
+                    'price' => $precio,
+                    'precio' => $precio,
+                    'subtotal' => $subtotal,
+                ];
 
                 DB::table('comander_detall')->insert([
                     'comander_id' => $comanderId,
-                    'id_menu' => $prod['id_menu'] ?? 1,
-                    'cantidad' => $prod['quantity'],
-                    'costo_unitario' => $prod['price'],
+                    'id_menu' => $productoId,
+                    'cantidad' => $cantidad,
+                    'costo_unitario' => $precio,
                     'total' => $subtotal,
                     'cliente' => $prod['tipo_cliente'] ?? 'Adulto',
                     'usuario' => $usuario,
-                    'email' => $emailCliente,
+                    'email' => $emailCliente !== '' ? $emailCliente : null,
                 ]);
             }
 
             DB::commit();
 
-            // Si el cliente ingresó un correo, le enviamos el ticket detallado
-            if (!empty($emailCliente)) {
-                try {
-                    $datosTicket = [
-                        'establecimiento' => "Ch'Tacos",
-                        'cliente' => $nombreCliente,
-                        'email' => $emailCliente,
-                        'mesa' => $mesa,
-                        'fecha' => $fechaHoraVenta,
-                        'productos' => $productos,
-                        'total' => $totalGeneral,
-                    ];
+            $datosTicket = [
+                'establecimiento' => "Ch'Tacos",
+                'comander_id' => $comanderId,
+                'cliente' => $nombreCliente,
+                'email' => $emailCliente,
+                'email_cliente' => $emailCliente,
+                'vendedor' => $usuario,
+                'mesa' => $mesa,
+                'fecha' => $fechaHoraVenta,
+                'productos' => $productosDetalle,
+                'total' => $totalGeneral,
+            ];
 
-                    Mail::to($emailCliente)->send(new TicketPedidoMail($datosTicket));
+            $destinatarios = [];
+
+            if ($emailCliente !== '') {
+                $destinatarios[] = $emailCliente;
+            }
+
+            if (auth()->check() && !empty(auth()->user()->email)) {
+                $destinatarios[] = auth()->user()->email;
+            }
+
+            $destinatarios = array_values(array_unique(array_filter($destinatarios, fn ($mail) => is_string($mail) && $mail !== '')));
+
+            if ($requiereTicket && !empty($destinatarios)) {
+                try {
+                    Mail::to($destinatarios)->send(new TicketPedidoMail($datosTicket));
                 } catch (\Exception $mailEx) {
-                    Log::error("Error al enviar el correo al cliente: " . $mailEx->getMessage());
+                    Log::error('Error al enviar el ticket por correo: ' . $mailEx->getMessage());
                 }
             }
 
-            return response()->json(['success' => true, 'message' => 'Venta registrada y ticket enviado con éxito al cliente.']);
-        } catch (\Exception $e) {
+            return response()->json([
+                'success' => true,
+                'message' => $requiereTicket
+                    ? 'Venta registrada con éxito y ticket enviado.'
+                    : 'Venta registrada con éxito.',
+            ]);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            Log::error('Error en CheckoutController store: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo completar la venta. Verifica los datos e intenta nuevamente.',
+            ], 500);
         }
     }
 }
