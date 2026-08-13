@@ -87,6 +87,10 @@
                             </button>
                         </div>
                     </div>
+                    <div class="text-right mt-1">
+                        <a href="{{ route('password.request') }}"
+                            class="text-xs text-primary hover:underline">¿Olvidaste tu contraseña?</a>
+                    </div>
 
                     <button type="submit"
                         class="inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-base font-semibold text-on-primary shadow-sm transition hover:opacity-90 active:scale-[0.99]">

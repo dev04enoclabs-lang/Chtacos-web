@@ -39,10 +39,26 @@
             </div>
         </section>
 
+        <section id="table-summary-card"
+            class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm fade-in hidden"
+            style="animation-delay: 0.3s;">
+            <div class="flex items-center justify-between mb-3 border-b border-outline-variant pb-3">
+                <h3 class="font-headline-md text-base font-bold text-on-surface flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-primary"></i>
+                    Resumen Total a Preparar
+                </h3>
+                {{-- <span id="summary-total-items" class="text-xs font-bold bg-primary/10 text-primary px-3 py-1 rounded-full">
+                    0 productos
+                </span> --}}
+            </div>
+
+            <ul id="summary-products-list" class="divide-y divide-outline-variant/30">
+            </ul>
+        </section>
+
         <section id="orders-container" class="space-y-4 fade-in" style="animation-delay: 0.2s;">
             <p class="text-center text-on-surface-variant py-8">No hay pedidos registrados todavía.</p>
         </section>
-
         <div class="pt-8 pb-12 flex flex-col gap-4">
             <div class="flex justify-between items-center px-2">
                 <span class="text-body-lg font-bold text-on-surface" id="total-table-label">Total de la Mesa (1)</span>

@@ -79,6 +79,21 @@
                         <div id="lista-checkbox-usuarios" class="flex flex-col gap-2"></div>
                     </div>
                 </div>
+                <div class="mt-6 p-6 border rounded bg-light" style="width: 100%;">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="requiere_ticket" name="requiere_ticket"
+                            value="1" onchange="toggleInputTicket(this)">
+                        <label class="form-check-label fw-bold" for="requiere_ticket">¿Deseas recibir tu ticket
+                            digital?</label>
+                    </div>
+
+                    <!-- Campo con ancho forzado al 100% -->
+                    <div id="campo_email_ticket" class="d-none mt-3" style="width: 90%;">
+                        <input type="email" id="email_ticket" name="email_ticket" class="form-control form-control-lg"
+                            style="width: 100% !important; min-width: 90%; box-sizing: border-box;"
+                            placeholder="Ingresa tu correo electrónico">
+                    </div>
+                </div>
 
                 <section class="space-y-4 fade-in" style="animation-delay: 0.2s;">
                     <div id="cart-orders-container" class="space-y-4"></div>
@@ -115,7 +130,7 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <button
+                        <button id="btn-pago-efectivo"
                             class="w-full bg-primary text-on-primary font-label-lg py-4 rounded-full shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-shopping-cart"></i>
                             Pago en Efectivo

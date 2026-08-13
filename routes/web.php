@@ -9,11 +9,18 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\PreventBackHistory;
 use App\Http\Middleware\CheckSessionTimeout;
 use App\Http\Controllers\SalesController;
+use \App\Http\Controllers\Auth\ForgotPasswordController;
 
 // sin proteccion, es route publica 
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
+
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -24,14 +31,14 @@ Route::post('/pedidos/sincronizar', [OfflineSyncController::class, 'sync']);
 Route::middleware(['auth', CheckSessionTimeout::class])->group(function () {
 
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-    Route::post('/checkout/procesar', [CheckoutController::class, 'store']);
+    Route::post('/checkout/procesar', [CheckoutController::class, 'store'])->middleware('auth');
     Route::get('/history', [HistoryController::class, 'index'])->name('history');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
 
     // Route Qr para WhatsApp
     Route::get('/codeQr', function () {
-        $phone = config('app.whatsapp_number', '7721043761'); 
+        $phone = config('app.whatsapp_number', '7721043761');
         $message = urlencode("¡Hola bienvenido a Ch'Tacos! Gusta realizar un pedido.");
         $whatsappUrl = "https://wa.me/{$phone}?text={$message}";
 

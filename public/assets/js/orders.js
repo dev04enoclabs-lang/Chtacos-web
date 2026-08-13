@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <li class="grid grid-cols-3 items-center gap-x-4 gap-y-1 py-1">
                         <div class="flex flex-col">
                             <span class="px-3 font-body-md text-on-surface font-medium">${prod.name}</span>
-                            <span class="px-3 text-xs text-on-surface-variant">Prep: ${pedido.preparacion}</span>
+                            <span class="px-3 text-[15px] text-on-surface-variant">Prep: ${pedido.preparacion}</span>
                         </div>
                         
                         <div class="flex items-center justify-center bg-surface-container-high rounded-lg p-0.5 border border-outline-variant justify-self-center">
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                         </div>
                     </div>
-                    <ul class="space-y-4 mb-4">
+                    <ul class="text-[16px] space-y-4 mb-4">
                         ${productosHtml}
                     </ul>
                     <button type="button" class="btn-add-more w-full py-2 border border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors" data-id="${pedido.id}">
@@ -190,6 +190,58 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         ordersContainer.innerHTML = html;
+
+        const summaryCard = document.getElementById("table-summary-card");
+        const summaryList = document.getElementById("summary-products-list");
+        const summaryTotalItems = document.getElementById(
+            "summary-total-items",
+        );
+
+        if (summaryCard && summaryList) {
+            if (pedidosFiltrados.length === 0) {
+                summaryCard.classList.add("hidden");
+            } else {
+                const acumuladoProductos = {};
+                let totalProductosCount = 0;
+
+                pedidosFiltrados.forEach((pedido) => {
+                    if (Array.isArray(pedido.productos)) {
+                        pedido.productos.forEach((prod) => {
+                            const nombre = prod.name;
+                            const cantidad = Number(prod.quantity) || 0;
+
+                            if (!acumuladoProductos[nombre]) {
+                                acumuladoProductos[nombre] = 0;
+                            }
+                            acumuladoProductos[nombre] += cantidad;
+                            totalProductosCount += cantidad;
+                        });
+                    }
+                });
+
+                let summaryHtml = "";
+                for (const [nombreProd, cantidadTotal] of Object.entries(
+                    acumuladoProductos,
+                )) {
+                    summaryHtml += `
+                <li class="flex items-center justify-between py-2.5">
+                    <span class="font-medium text-on-surface text-[15px]">${nombreProd}</span>
+                    <span class="font-extrabold text-[15px] text-black-600 bg-black-500/10 px-3 py-1 rounded-lg">
+                        x${cantidadTotal}
+                    </span>
+                </li>
+            `;
+                }
+
+                summaryList.innerHTML = summaryHtml;
+
+                if (summaryTotalItems) {
+                    summaryTotalItems.textContent = `${totalProductosCount} producto${totalProductosCount === 1 ? "" : "s"}`;
+                }
+
+                summaryCard.classList.remove("hidden");
+            }
+        }
     }
 
     // Listener corregido para cambio de mesa

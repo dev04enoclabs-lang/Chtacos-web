@@ -29,7 +29,7 @@ class CheckSessionTimeout
                 $request->session()->regenerateToken();
 
                 $seconds = self::MAX_SESSION_TIME;
-                return redirect()->route('login')->with('error', "Tu sesión ha caducado tras {$seconds} horas. Por favor, inicia sesión de nuevo.");
+                return redirect()->route('login')->with('error', "Tu sesión ha caducado tras 5 horas. Por favor, inicia sesión de nuevo.");
             }
         }
 
