@@ -72,6 +72,28 @@
             </a>
         </div>
     </main>
+
+    <div id="delete-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div
+            class="bg-surface-container-lowest rounded-2xl p-6 w-full max-w-sm shadow-xl border border-outline-variant mx-4">
+            <div class="flex items-center gap-3 text-red-600 mb-3">
+                <i class="fas fa-trash-alt text-2xl"></i>
+                <h3 class="font-bold text-lg text-on-surface">Eliminar Orden</h3>
+            </div>
+            <p id="delete-modal-text" class="text-on-surface-variant text-sm mb-6">¿Estás seguro de que deseas eliminar esta orden?</p>
+            <div class="flex justify-end gap-3">
+                <button id="btn-cancel-delete" type="button"
+                    class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors">
+                    Cancelar
+                </button>
+                <button id="btn-confirm-delete" type="button"
+                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('scripts')
