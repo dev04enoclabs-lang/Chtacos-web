@@ -14,6 +14,39 @@ document.addEventListener("DOMContentLoaded", () => {
         tableSelect.value = "1";
     }
 
+    // Modal de eliminar orden y variable de callback declarada correctamente
+    let callbackConfirmacion = null;
+    const deleteModal = document.getElementById("delete-modal");
+    const deleteModalText = document.getElementById("delete-modal-text");
+    const btnConfirmDelete = document.getElementById("btn-confirm-delete");
+    const btnCancelDelete = document.getElementById("btn-cancel-delete");
+
+    function mostrarModalEliminar(mensaje, accion) {
+        if (!deleteModal) return;
+        deleteModalText.textContent = mensaje;
+        callbackConfirmacion = accion;
+        deleteModal.classList.remove("hidden");
+    }
+
+    function cerrarModalEliminar() {
+        if (!deleteModal) return;
+        deleteModal.classList.add("hidden");
+        callbackConfirmacion = null;
+    }
+
+    if (btnCancelDelete) {
+        btnCancelDelete.addEventListener("click", cerrarModalEliminar);
+    }
+
+    if (btnConfirmDelete) {
+        btnConfirmDelete.addEventListener("click", () => {
+            if (typeof callbackConfirmacion === "function") {
+                callbackConfirmacion();
+            }
+            cerrarModalEliminar();
+        });
+    }
+
     // Actualiza el estado visual (rojo/verde) de cada mesa en el selector
     function updateTableSelectStatus() {
         if (!tableSelect) return;
@@ -25,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (option.hidden) return;
 
             const nombreMesaOption = option.textContent.trim().toLowerCase();
-
             const tienePedido = pedidosGuardados.some(
                 (pedido) =>
                     String(pedido.mesa).trim().toLowerCase() ===
@@ -112,6 +144,60 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Resumen superior
+        const summaryCard = document.getElementById("table-summary-card");
+        const summaryList = document.getElementById("summary-products-list");
+        const summaryTotalItems = document.getElementById(
+            "summary-total-items",
+        );
+
+        if (summaryCard && summaryList) {
+            if (pedidosFiltrados.length === 0) {
+                summaryCard.classList.add("hidden");
+                summaryList.innerHTML = "";
+            } else {
+                const acumuladoProductos = {};
+                let totalProductosCount = 0;
+
+                pedidosFiltrados.forEach((pedido) => {
+                    if (Array.isArray(pedido.productos)) {
+                        pedido.productos.forEach((prod) => {
+                            const nombre = prod.name;
+                            const cantidad = Number(prod.quantity) || 0;
+
+                            if (!acumuladoProductos[nombre]) {
+                                acumuladoProductos[nombre] = 0;
+                            }
+                            acumuladoProductos[nombre] += cantidad;
+                            totalProductosCount += cantidad;
+                        });
+                    }
+                });
+
+                let summaryHtml = "";
+                for (const [nombreProd, cantidadTotal] of Object.entries(
+                    acumuladoProductos,
+                )) {
+                    summaryHtml += `
+                        <li class="flex items-center justify-between py-2.5">
+                            <span class="font-medium text-on-surface text-[15px]">${nombreProd}</span>
+                            <span class="font-extrabold text-[15px] text-black-600 bg-black-500/10 px-3 py-1 rounded-lg">
+                                x${cantidadTotal}
+                            </span>
+                        </li>
+                    `;
+                }
+
+                summaryList.innerHTML = summaryHtml;
+
+                if (summaryTotalItems) {
+                    summaryTotalItems.textContent = `${totalProductosCount} producto${totalProductosCount === 1 ? "" : "s"}`;
+                }
+
+                summaryCard.classList.remove("hidden");
+            }
+        }
+
         if (pedidosFiltrados.length === 0) {
             ordersContainer.innerHTML = `<p class="text-center text-on-surface-variant py-8">No hay pedidos registrados para la ${mesaActual}.</p>`;
             return;
@@ -121,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         pedidosFiltrados.forEach((pedido) => {
             let productosHtml = "";
+            const readyOrders = Boolean(pedido.listo);
 
             pedido.productos.forEach((prod, prodIndex) => {
                 productosHtml += `
@@ -144,6 +231,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     </li>
                 `;
             });
+
+            const cardBgClass = readyOrders
+                ? "bg-green-100/80 border-green-500 shadow-md"
+                : "bg-surface-container-lowest border-outline-variant shadow-sm";
+
+            const btnListoClass = readyOrders
+                ? "border-red-500 text-red-600 bg-red-50 hover:bg-red-100"
+                : "border-green-600 text-green-700 bg-green-50 hover:bg-green-100";
+
+            const btnListoIcon = readyOrders ? "close" : "check";
+            const btnListoText = readyOrders ? "Cancelar / Modificar" : "Listo";
 
             html += `
                 <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant shadow-sm transition-transform duration-200 mb-4">
@@ -176,6 +274,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     <ul class="text-[16px] space-y-4 mb-4">
                         ${productosHtml}
                     </ul>
+                    <button type="button" class="btn-toggle-ready w-full py-2 mb-2 border rounded-lg font-label-lg flex items-center justify-center gap-2 transition-colors ${btnListoClass}" data-id="${pedido.id}">
+                        <span class="material-symbols-outlined text-sm">${btnListoIcon}</span> ${btnListoText}
+                    </button>
                     <button type="button" class="btn-add-more w-full py-2 border border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors" data-id="${pedido.id}">
                         <span class="material-symbols-outlined text-sm">add</span> Agregar Producto
                     </button>
@@ -190,61 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         ordersContainer.innerHTML = html;
-
-        const summaryCard = document.getElementById("table-summary-card");
-        const summaryList = document.getElementById("summary-products-list");
-        const summaryTotalItems = document.getElementById(
-            "summary-total-items",
-        );
-
-        if (summaryCard && summaryList) {
-            if (pedidosFiltrados.length === 0) {
-                summaryCard.classList.add("hidden");
-            } else {
-                const acumuladoProductos = {};
-                let totalProductosCount = 0;
-
-                pedidosFiltrados.forEach((pedido) => {
-                    if (Array.isArray(pedido.productos)) {
-                        pedido.productos.forEach((prod) => {
-                            const nombre = prod.name;
-                            const cantidad = Number(prod.quantity) || 0;
-
-                            if (!acumuladoProductos[nombre]) {
-                                acumuladoProductos[nombre] = 0;
-                            }
-                            acumuladoProductos[nombre] += cantidad;
-                            totalProductosCount += cantidad;
-                        });
-                    }
-                });
-
-                let summaryHtml = "";
-                for (const [nombreProd, cantidadTotal] of Object.entries(
-                    acumuladoProductos,
-                )) {
-                    summaryHtml += `
-                <li class="flex items-center justify-between py-2.5">
-                    <span class="font-medium text-on-surface text-[15px]">${nombreProd}</span>
-                    <span class="font-extrabold text-[15px] text-black-600 bg-black-500/10 px-3 py-1 rounded-lg">
-                        x${cantidadTotal}
-                    </span>
-                </li>
-            `;
-                }
-
-                summaryList.innerHTML = summaryHtml;
-
-                if (summaryTotalItems) {
-                    summaryTotalItems.textContent = `${totalProductosCount} producto${totalProductosCount === 1 ? "" : "s"}`;
-                }
-
-                summaryCard.classList.remove("hidden");
-            }
-        }
     }
 
-    // Listener corregido para cambio de mesa
     if (tableSelect) {
         tableSelect.addEventListener("change", () => {
             const selectedOption =
@@ -260,27 +308,32 @@ document.addEventListener("DOMContentLoaded", () => {
         let pedidosGuardados =
             JSON.parse(localStorage.getItem("my_orders")) || [];
 
-        // Eliminar pedido completo
+        // 1. Eliminar pedido completo
         const deleteBtn = e.target.closest(".btn-delete-order");
         if (deleteBtn) {
             const id = Number(deleteBtn.getAttribute("data-id"));
-            if (confirm("¿Estás seguro de cancelar y eliminar este pedido?")) {
-                pedidosGuardados = pedidosGuardados.filter((p) => p.id !== id);
-                localStorage.setItem(
-                    "my_orders",
-                    JSON.stringify(pedidosGuardados),
-                );
-                renderOrders();
-            }
+            mostrarModalEliminar(
+                "¿Estás seguro de cancelar y eliminar este pedido?",
+                () => {
+                    let pedidosG =
+                        JSON.parse(localStorage.getItem("my_orders")) || [];
+                    pedidosG = pedidosG.filter((p) => p.id !== id);
+                    localStorage.setItem("my_orders", JSON.stringify(pedidosG));
+                    renderOrders();
+                },
+            );
+            return;
         }
 
-        // Incrementar cantidad
+        // 2. Incrementar cantidad
         const plusBtn = e.target.closest(".order-btn-plus");
         if (plusBtn) {
             const orderId = Number(plusBtn.getAttribute("data-order-id"));
             const prodIndex = Number(plusBtn.getAttribute("data-prod-index"));
 
             const pedido = pedidosGuardados.find((p) => p.id === orderId);
+            if (pedido && pedido.listo) return;
+
             if (pedido && pedido.productos[prodIndex]) {
                 pedido.productos[prodIndex].quantity += 1;
                 pedido.total = pedido.productos.reduce(
@@ -293,47 +346,73 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
                 renderOrders();
             }
+            return;
         }
 
-        // Decrementar cantidad / eliminar producto
+        // 3. Decrementar cantidad / eliminar producto
         const minusBtn = e.target.closest(".order-btn-minus");
         if (minusBtn) {
             const orderId = Number(minusBtn.getAttribute("data-order-id"));
             const prodIndex = Number(minusBtn.getAttribute("data-prod-index"));
 
             const pedido = pedidosGuardados.find((p) => p.id === orderId);
+            if (pedido && pedido.listo) return;
+
             if (pedido && pedido.productos[prodIndex]) {
-                pedido.productos[prodIndex].quantity -= 1;
+                // Si la cantidad es 1, pedimos confirmación con modal antes de borrar
+                if (pedido.productos[prodIndex].quantity === 1) {
+                    mostrarModalEliminar(
+                        `¿Deseas eliminar "${pedido.productos[prodIndex].name}" del pedido?`,
+                        () => {
+                            let pedidosG =
+                                JSON.parse(localStorage.getItem("my_orders")) ||
+                                [];
+                            const pTarget = pedidosG.find(
+                                (p) => p.id === orderId,
+                            );
 
-                if (pedido.productos[prodIndex].quantity <= 0) {
-                    pedido.productos.splice(prodIndex, 1);
-                }
-
-                if (pedido.productos.length === 0) {
-                    pedidosGuardados = pedidosGuardados.filter(
-                        (p) => p.id !== orderId,
+                            if (pTarget) {
+                                pTarget.productos.splice(prodIndex, 1);
+                                if (pTarget.productos.length === 0) {
+                                    pedidosG = pedidosG.filter(
+                                        (p) => p.id !== orderId,
+                                    );
+                                } else {
+                                    pTarget.total = pTarget.productos.reduce(
+                                        (acc, item) =>
+                                            acc + item.price * item.quantity,
+                                        0,
+                                    );
+                                }
+                                localStorage.setItem(
+                                    "my_orders",
+                                    JSON.stringify(pedidosG),
+                                );
+                                renderOrders();
+                            }
+                        },
                     );
                 } else {
+                    // Decremento directo sin modal cuando la cantidad es > 1
+                    pedido.productos[prodIndex].quantity -= 1;
                     pedido.total = pedido.productos.reduce(
                         (acc, item) => acc + item.price * item.quantity,
                         0,
                     );
+                    localStorage.setItem(
+                        "my_orders",
+                        JSON.stringify(pedidosGuardados),
+                    );
+                    renderOrders();
                 }
-
-                localStorage.setItem(
-                    "my_orders",
-                    JSON.stringify(pedidosGuardados),
-                );
-                renderOrders();
             }
+            return;
         }
 
-        // Botón agregar más productos al pedido
+        // 4. Botón agregar más productos al pedido
         const addMoreBtn = e.target.closest(".btn-add-more");
         if (addMoreBtn) {
             const orderId = Number(addMoreBtn.getAttribute("data-id"));
-            const pedidosGuardados =
-                JSON.parse(localStorage.getItem("my_orders")) || [];
             const pedidoActual = pedidosGuardados.find((p) => p.id === orderId);
 
             if (pedidoActual) {
@@ -342,18 +421,34 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 window.location.href = "/menu";
             }
+            return;
         }
 
-        // Button de agregar clientes
+        // 5. Botón de agregar clientes
         const addClientBtn = e.target.closest(".btn-add-client");
         if (addClientBtn) {
             const mesaNombre =
                 addClientBtn.getAttribute("data-mesa") || mesaActual;
             const mesaNum = mesaNombre.replace("Mesa ", "");
-
-            // Redirige al menú fijando la mesa actual pero SIN usuario u order_id
-            // Esto permite seleccionar/escribir un nuevo nombre de cliente
             window.location.href = `/menu?mesa=${mesaNum}&nuevo_cliente=true`;
+            return;
+        }
+
+        // 6. Botón de Listo / Modificar
+        const toggleReadyBtn = e.target.closest(".btn-toggle-ready");
+        if (toggleReadyBtn) {
+            const orderId = Number(toggleReadyBtn.getAttribute("data-id"));
+            const pedido = pedidosGuardados.find((p) => p.id === orderId);
+
+            if (pedido) {
+                pedido.listo = !pedido.listo;
+                localStorage.setItem(
+                    "my_orders",
+                    JSON.stringify(pedidosGuardados),
+                );
+                renderOrders();
+            }
+            return;
         }
     });
 

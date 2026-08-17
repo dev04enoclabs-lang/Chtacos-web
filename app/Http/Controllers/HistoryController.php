@@ -11,10 +11,10 @@ class HistoryController extends Controller
 {
     public function index(): View
     {
-        $historialPedidos = ComanderDetall::with('comander', 'menu')
+        $historyOrders = ComanderDetall::with('comander', 'menu')
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('history', compact('historialPedidos'));
+        return view('history', compact('historyOrders'));
     }
 }

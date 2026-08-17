@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-500">
-                    @forelse($historialPedidos as $detalle)
+                    @forelse($historyOrders as $detalle)
                         <tr>
                             <td class="px-4 py-2 text-sm font-bold">{{ $detalle->comander_id ?? 'Sin ID' }}</td>
                             <td class="px-4 py-2 text-sm font-bold">{{ $detalle->usuario ?? 'Sin Usuario' }}</td>
@@ -42,7 +42,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-8 py-8 text-center text-gray-500">No hay registros en el historial.
+                            <td colspan="9" class="px-8 py-8 text-center text-gray-500">No hay registros en el historial.
                             </td>
                         </tr>
                     @endforelse
