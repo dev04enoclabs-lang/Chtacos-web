@@ -88,10 +88,22 @@
                     </div>
 
                     <!-- Campo con ancho forzado al 100% -->
-                    <div id="campo_email_ticket" class="d-none mt-3" style="width: 90%;">
-                        <input type="email" id="email_ticket" name="email_ticket" class="form-control form-control-lg"
-                            style="width: 100% !important; min-width: 90%; box-sizing: border-box;"
-                            placeholder="Ingresa tu correo electrónico">
+                    <div id="campo_email_ticket" class="d-none mt-3 space-y-3" style="width: 90%;">
+                        <div>
+                            <label for="name_customer" class="block text-xs font-semibold text-gray-700 mb-1">Nombre del
+                                Cliente (Opcional):</label>
+                            <input type="text" id="name_customer" name="name_customer"
+                                class="form-control form-control-lg"
+                                style="width: 100% !important; min-width: 90%; box-sizing: border-box;"
+                                placeholder="Ingresa tu Nombre (Por default: Cliente General)">
+                        </div>
+                        <div>
+                            <label for="email_ticket" class="block text-xs font-semibold text-gray-700 mb-1">Correo
+                                Electrónico:</label>
+                            <input type="email" id="email_ticket" name="email_ticket" class="form-control form-control-lg"
+                                style="width: 100% !important; min-width: 90%; box-sizing: border-box;"
+                                placeholder="Ingresa tu correo electrónico">
+                        </div>
                     </div>
                 </div>
 

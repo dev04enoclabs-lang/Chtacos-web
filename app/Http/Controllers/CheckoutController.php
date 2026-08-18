@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\TicketPedidoMail;
+use App\Models\Comander;
 
 class CheckoutController extends Controller
 {
@@ -20,7 +21,7 @@ class CheckoutController extends Controller
             ? trim((string) ($request->input('email_ticket') ?: $request->input('email', '')))
             : trim((string) ($request->input('email', '')));
 
-        $nombreCliente = trim((string) $request->input('nombre', $request->input('cliente', 'Cliente General')));
+        $nombreCliente = trim((string) $request->input('nombre', 'Cliente General'));
         $nombreCliente = $nombreCliente !== '' ? $nombreCliente : 'Cliente General';
 
         $usuario = auth()->check()
@@ -36,11 +37,13 @@ class CheckoutController extends Controller
         DB::beginTransaction();
 
         try {
-            $comanderId = DB::table('comander')->insertGetId([
+            $comander = Comander::create([
                 'mesa' => $mesa,
                 'cliente' => $nombreCliente,
                 'email' => $emailCliente !== '' ? $emailCliente : null,
             ]);
+
+            $comanderId = $comander->id;
 
             $totalGeneral = 0;
             $fechaHoraVenta = now()->format('Y-m-d H:i:s');
@@ -102,7 +105,7 @@ class CheckoutController extends Controller
                 $destinatarios[] = auth()->user()->email;
             }
 
-            $destinatarios = array_values(array_unique(array_filter($destinatarios, fn ($mail) => is_string($mail) && $mail !== '')));
+            $destinatarios = array_values(array_unique(array_filter($destinatarios, fn($mail) => is_string($mail) && $mail !== '')));
 
             if ($requiereTicket && !empty($destinatarios)) {
                 try {
