@@ -11,7 +11,12 @@ class Comander extends Model
 
     const CREATE_AT = 'create_at';
     const UPDATE_AT = 'date_mod';
-
+    public $timestamps = false;
+    protected $fillable = [
+        'mesa',
+        'cliente',
+        'email',
+    ];
 
     public function detall(): HasMany
     {

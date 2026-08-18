@@ -37,8 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalMessage = document.getElementById("modal-message");
     const modalCloseBtn = document.getElementById("modal-close-btn");
 
-    const sellerId = document.querySelector('meta[name="user-id"]')?.getAttribute('content');
-    const sellerName = document.querySelector('meta[name="user-name"]')?.getAttribute('content');
+    const sellerId = document
+        .querySelector('meta[name="user-id"]')
+        ?.getAttribute("content");
+    const sellerName = document
+        .querySelector('meta[name="user-name"]')
+        ?.getAttribute("content");
     let modalCloseCallback = null;
 
     function showModal(title, message, isSuccess = true, onClose = null) {
@@ -105,13 +109,15 @@ document.addEventListener("DOMContentLoaded", () => {
     window.toggleInputTicket = function (checkbox) {
         const emailWrap = document.getElementById("campo_email_ticket");
         const emailInput = document.getElementById("email_ticket");
+        const nameInput = document.getElementById("name_customer");
 
-        if (!emailWrap || !emailInput) return;
+        if (!emailWrap) return;
 
         emailWrap.classList.toggle("d-none", !checkbox.checked);
 
         if (!checkbox.checked) {
-            emailInput.value = "";
+            if (emailInput) emailInput.value = "";
+            if (nameInput) nameInput.value = "";
         }
     };
 
@@ -284,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Function de select para pedidos vacios 
+    // Function de select para pedidos vacios
     function updateTableSelectStatus() {
         const tableSelect = document.getElementById("cart-table-select");
         if (!tableSelect) return;
@@ -305,11 +311,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (tienePedido) {
                 option.disabled = false;
-                option.style.color = "#16a34a"; // Verde 
+                option.style.color = "#16a34a"; // Verde
                 option.style.fontWeight = "bold";
             } else {
                 option.disabled = true;
-                option.style.color = "#dc2626"; // Rojo 
+                option.style.color = "#dc2626"; // Rojo
                 option.style.fontWeight = "normal";
             }
         });
@@ -345,6 +351,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 "input[name='tipo_pago']:checked",
             );
             const paymentType = activeRadio ? activeRadio.value : "total";
+            const requiereTicket =
+                document.getElementById("requiere_ticket")?.checked || false;
 
             const pedidosFiltrados = pedidosGuardados.filter(
                 (pedido) =>
@@ -392,16 +400,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("email_ticket");
 
             const nombreClienteVal =
-                inputNombreCliente && inputNombreCliente.value.trim() !== ""
+                requiereTicket &&
+                inputNombreCliente &&
+                inputNombreCliente.value.trim() !== ""
                     ? inputNombreCliente.value.trim()
                     : "Cliente General";
 
-            const requiereTicket =
-                document.getElementById("requiere_ticket")?.checked || false;
             const emailClienteVal = inputEmailCliente
                 ? inputEmailCliente.value.trim()
-                : "";
+                : "Sin correo";
 
+            if (requiereTicket && !emailClienteVal) {
+                showModal(
+                    "!Atención¡",
+                    "Por favor, ingrese un correo electronico para enviar su ticket.",
+                );
+                return;
+            }
             const datosVenta = {
                 mesa: mesaActual,
                 nombre: nombreClienteVal,
@@ -438,8 +453,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         resultado = JSON.parse(text);
                     } catch (jsonError) {
-                        console.error("Respuesta JSON inválida:", jsonError, text);
-                        throw new Error("La respuesta del servidor no es un JSON válido.");
+                        console.error(
+                            "Respuesta JSON inválida:",
+                            jsonError,
+                            text,
+                        );
+                        throw new Error(
+                            "La respuesta del servidor no es un JSON válido.",
+                        );
                     }
                 }
 

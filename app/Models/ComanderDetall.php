@@ -14,6 +14,7 @@ class ComanderDetall extends Model
 
     public $timestamps = false; //Esta tabla no ocupa creaate_at y date_mod por defecto 
 
+
     public function comander(): BelongsTo
     {
         return $this->belongsTo(Comander::class, 'comander_id', 'id');
