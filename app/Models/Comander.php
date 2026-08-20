@@ -13,8 +13,9 @@ class Comander extends Model
     const UPDATE_AT = 'date_mod';
     public $timestamps = false;
     protected $fillable = [
+        'user_id',
         'mesa',
-        'cliente',
+        'name_customer',
         'email',
     ];
 
