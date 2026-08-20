@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\TicketPedidoMail;
 use App\Models\Comander;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
@@ -38,8 +39,9 @@ class CheckoutController extends Controller
 
         try {
             $comander = Comander::create([
+                'user_id' => Auth::id(),
                 'mesa' => $mesa,
-                'cliente' => $nombreCliente,
+                'name_customer' => $nombreCliente,
                 'email' => $emailCliente !== '' ? $emailCliente : null,
             ]);
 

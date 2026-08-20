@@ -12,9 +12,9 @@
                 <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <i class="fa-solid fa-qrcode text-2xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-on-surface">Escanea y Ordena</h2>
+                <h2 class="text-2xl font-bold text-on-surface">Escanea para Obtener la Clave de Transferencia</h2>
                 <p class="mt-1 text-sm text-on-surface-variant">
-                    Escanea con la cámara de tu celular el Qr para contactar a <span
+                    Escanea con la cámara de tu celular el Qr para obtener la clave de tranferencia de <span
                         class="font-semibold text-primary">Ch'Tacos</span> en WhatsApp
                 </p>
             </div>

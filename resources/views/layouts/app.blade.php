@@ -67,6 +67,11 @@
                             <i class="fa-solid fa-bag-shopping text-lg"></i>
                             Ventas
                         </a>
+                        <a href="{{ route('users.create') }}"
+                            class="flex items-center gap-2 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-high transition-colors">
+                            <i class="fa-solid fa-user-plus text-lg"></i>
+                            Agregar Usuario
+                        </a>
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
                             <button type="submit"

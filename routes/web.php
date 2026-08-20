@@ -36,10 +36,20 @@ Route::middleware(['auth', CheckSessionTimeout::class])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
 
+    // view of create users the route 
+    Route::get('/users/create', [AuthController::class, 'create'])->name('users.create');
+    Route::post('/users', [AuthController::class, 'store'])->name('users.store');
+
     // Route Qr para WhatsApp
     Route::get('/codeQr', function () {
         $phone = config('app.whatsapp_number', '7721043761');
-        $message = urlencode("¡Hola bienvenido a Ch'Tacos! Gusta realizar un pedido.");
+        $text = "¡Hola! 👋 Te saluda el equipo de *Ch'Tacos* 🌮🔥\n\n"
+            . "Te comparto nuestra *CLABE interbancaria / datos de transferencia* de Mercado Pago para realizar tu depósito: 💳✨\n\n"
+            . "📌 *CLABE:* [AQUÍ_TU_CLABE]\n"
+            . "📌 *Banco:* Mercado Pago\n"
+            . "📌 *Beneficiario:* Ch'Tacos\n\n"
+            . "Por favor, envíame la captura del comprobante por este medio una vez realizado el pago. 🙌";
+        $message = urlencode($text);
         $whatsappUrl = "https://wa.me/{$phone}?text={$message}";
 
         return view('codeQr', compact('whatsappUrl'));
