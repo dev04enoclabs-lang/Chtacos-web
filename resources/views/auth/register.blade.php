@@ -49,14 +49,32 @@
                         <label for="password" class="block text-sm font-medium text-on-surface">Contraseña</label>
                         <div class="relative mt-1">
                             <input type="password" name="password" id="password" required placeholder="••••••••"
-                                class="block w-full rounded-lg border border-outline-variant bg-surface-container-highest pl-3 pr-10 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary">
-
+                                class="block w-full rounded-lg border border-outline-variant bg-surface-container-highest pl-3 pr-10 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none">
                             <button type="button" id="togglePassword"
                                 class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none"
                                 aria-label="Mostrar u ocultar contraseña">
                                 <i id="toggleIcon" class="fa-solid fa-eye"></i>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Campo Confirmar Contraseña -->
+                    <div class="mb-4">
+                        <label for="password_confirmation" class="block text-sm font-medium text-on-surface">Confirmar
+                            Contraseña</label>
+                        <div class="relative mt-1">
+                            <input type="password" name="password_confirmation" id="password_confirmation" required
+                                placeholder="••••••••"
+                                class="block w-full rounded-lg border border-outline-variant bg-surface-container-highest pl-3 pr-10 py-2 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none">
+                            <button type="button" id="togglePasswordConfirm"
+                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none"
+                                aria-label="Mostrar u ocultar confirmación de contraseña">
+                                <i id="toggleIconConfirm" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <p id="password-match-error" class="hidden text-xs text-red-600 mt-1 font-semibold">
+                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Las contraseñas no coinciden.
+                        </p>
                     </div>
 
                     <div class="flex items-center justify-between gap-4 mt-6">
@@ -73,7 +91,7 @@
             </div>
         </div>
     </div>
-@push ('scripts')
-<script src="{{ asset('assets/js/register.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="{{ asset('assets/js/register.js') }}" defer></script>
+    @endpush
 @endsection

@@ -7,15 +7,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', "Ch'Tacos")</title>
+
+    <link rel="preconnect" href="http://cdnjs.Cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="http://cdnjs.Cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/css/swap.css') }}" media="print" onload="this.media='all'">
-
-    <noscript>
-        <link rel="stylesheet" href="{{ asset('assets/css/swap.css') }}">
-    </noscript>
+    <link rel="stylesheet" href="{{ asset('assets/css/swap.css') }}">
 
     @stack('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -125,8 +124,8 @@
             });
         }
     </script>
-    <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/js/tallwind-config.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}" defer></script>
+    <script src="{{ asset('assets/js/tallwind-config.js') }}" defer></script>
     @stack('scripts')
 </body>
 
