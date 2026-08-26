@@ -53,7 +53,7 @@ public function store(Request $request)
         'name'      => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
         'email'     => 'required|email|unique:users,email',
-        'password'  => 'required|min:6',
+        'password'  => 'required|string|min:8|confirmed',
     ]);
 
     User::create([

@@ -51,7 +51,7 @@ Route::middleware(['auth', CheckSessionTimeout::class])->group(function () {
             . "Por favor, envíame la captura del comprobante por este medio una vez realizado el pago. 🙌";
         $message = urlencode($text);
         $whatsappUrl = "https://wa.me/{$phone}?text={$message}";
-
+  
         return view('codeQr', compact('whatsappUrl'));
     })->name('codeQr');
 

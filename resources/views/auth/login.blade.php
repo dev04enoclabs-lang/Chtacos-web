@@ -100,8 +100,8 @@
         </div>
     </main>
 </body>
-<script src="{{ asset('assets/js/app.js') }}"></script>
-<script src="{{ asset('assets/js/login.js') }}"></script>
-<script src="{{ asset('assets/js/tallwind-config.js') }}"></script>
+<script src="{{ asset('assets/js/app.js') }}" defer></script>
+<script src="{{ asset('assets/js/login.js') }}" defer ></script>
+<script src="{{ asset('assets/js/tallwind-config.js') }}" defer></script>
 
 </html>
