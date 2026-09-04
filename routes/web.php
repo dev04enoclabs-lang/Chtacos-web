@@ -68,3 +68,7 @@ Route::middleware(['auth', CheckSessionTimeout::class])->group(function () {
     })->name('ticket');
 
 });
+
+Route::get('orden-customer', function (){
+    return view('customer-order.orden-customer');
+})->name('orden-customer');
