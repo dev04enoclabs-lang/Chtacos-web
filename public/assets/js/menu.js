@@ -391,11 +391,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
         });
-        
 
         cartContainer.innerHTML = html;
     }
-    
 
     function updateTotalPrice() {
         if (!totalPriceEl) return;
@@ -454,5 +452,47 @@ document.addEventListener("DOMContentLoaded", () => {
             carouselTrack.classList.remove("is-paused");
             isPaused = false;
         });
+    }
+
+    window.scrollToOrders = function () {
+        const ordersCard = document.getElementById("orders-card");
+
+        if (ordersCard) {
+            ordersCard.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        } else {
+            console.warn(
+                "El elemento #orders-card no fue encontrado en el DOM.",
+            );
+        }
+    };
+
+    const floatOrderBtn = document.getElementById("btn-float-orders");
+    let isScrollingTimer = null;
+
+    if (floatOrderBtn) {
+        window.addEventListener(
+            "scroll",
+            () => {
+                floatOrderBtn.classList.add(
+                    "opacity-0",
+                    "pointer-events-none",
+                    "scale-95",
+                );
+
+                clearTimeout(isScrollingTimer);
+
+                isScrollingTimer = setTimeout(() => {
+                    floatOrderBtn.classList.remove(
+                        "opacity-0",
+                        "pointer-events-none",
+                        "scale-95",
+                    );
+                }, 250);
+            },
+            { passive: true },
+        );
     }
 });

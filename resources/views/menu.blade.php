@@ -176,12 +176,16 @@
                                                 ${{ number_format($product->price, 2) }}
                                             </span>
                                             <button
-                                                class="relative w-8 h-8 md:w-10 md:h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
+                                                class="relative w-16 h-16 md:w-12 md:h-12 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-primary-container hover:scale-105 transition-all"
                                                 data-action="add-to-cart" data-id="{{ $product->id }}"
                                                 data-name="{{ $product->name }}">
-                                                <i class="fas fa-plus text-xs md:text-lg"></i>
+
+                                                <!-- Icono de "+"" tamaño: text-2xl -->
+                                                <i class="fas fa-plus text-2xl md:text-xl"></i>
+
+                                                <!-- Para hacer el Num. mas grande al seleccionar un producto w-12 h-12 -->
                                                 <span
-                                                    class="product-qty-badge hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] md:text-xs font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
+                                                    class="product-qty-badge hidden absolute -top-1 -right-1 bg-red-600 text-white text-xs md:text-sm font-bold w-12 h-12 md:w-6 md:h-6 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
                                             </button>
                                         </div>
                                     </div>
@@ -197,7 +201,7 @@
                 </div>
 
                 <!-- Panel 'Tu Orden' (Se fija al hacer scroll con sticky top-20) -->
-                <aside class="lg:col-span-1 sticky top-20 z-30">
+                <aside id="orders-card" class="lg:col-span-1 sticky top-20 z-30">
                     <div class="bg-surface-container rounded-2xl p-4 md:p-6 shadow-sm border border-outline-variant">
                         <div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-3">
                             <i class="fas fa-receipt text-primary text-xl"></i>
@@ -239,6 +243,13 @@
 
         </div>
     </main>
+
+    {{-- Button de Nav orders --}}
+    <button type="button" id="btn-float-orders" onclick="scrollToOrders()"
+        class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-primary text-on-primary w-20 h-20 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/20"
+        title="Ver mi pedido">
+        <i class="fa-solid fa-arrow-down text-xl"></i>
+    </button>
 
     <!-- Modal Personalizado -->
     <div id="custom-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">

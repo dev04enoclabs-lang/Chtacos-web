@@ -39,8 +39,13 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <h2 class="text-1xl font-bold text-black drop-shadow-sm"> Usuario:
-                    {{ (auth()->user()->name ?? 'Invitado') . ' ' . (auth()->user()->last_name ?? '') }}</h2>
+                <div class="flex items-center min-w-0 max-w-[130px] sm:max-w-none ml-auto">
+                    <span
+                        class="text-xs sm:text-base md:text-xl font-bold text-black drop-shadow-sm truncate whitespace-nowrap">
+                        ¡Bienvenido!
+                        {{ (auth()->user()->name ?? 'Invitado') . ' ' . (auth()->user()->last_name ?? '') }}
+                    </span>
+                </div>
                 <!-- Menú de tres puntos (Dropdown) -->
                 <div class="relative">
                     <button id="btn-options-menu" type="button"
