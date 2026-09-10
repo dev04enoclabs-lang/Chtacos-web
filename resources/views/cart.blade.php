@@ -149,11 +149,11 @@
                             <i class="fas fa-check-circle"></i>
                         </button>
 
-                        <button
+                        {{-- <button
                             class="w-full md:hidden border-2 border-primary text-primary font-label-lg py-4 rounded-full hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-credit-card"></i>
                             Pago por tarjeta
-                        </button>
+                        </button> --}}
                     </div>
 
                     <div class="mt-6 flex items-center justify-center gap-4 opacity-60">
