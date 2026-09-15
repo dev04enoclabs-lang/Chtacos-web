@@ -74,8 +74,8 @@
                                 <option value="Mesa 3">Mesa 3</option>
                                 <option value="Mesa 4">Mesa 4</option>
                                 <option value="Mesa 5">Mesa 5</option>
-                                <option value="Mesa 6">Llevar-1</option>
-                                <option value="Mesa 7">LLevar-2</option>
+                                <option value="Llevar-1">Llevar-1</option>
+                                <option value="Llevar-2">Llevar-2</option>
                             </select>
                             <i
                                 class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
