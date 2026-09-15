@@ -9,9 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalTableAmount = document.getElementById("total-table-amount");
     const btnAccount = document.getElementById("btn-account");
 
+    const normalizarMesa = (mesa) => {
+        const mesaNormalizada = String(mesa || "").trim();
+        return (
+            {
+                "Mesa 6": "Llevar-1",
+                "Mesa 7": "Llevar-2",
+            }[mesaNormalizada] || mesaNormalizada
+        );
+    };
+
     let mesaActual = "Mesa 1";
     if (tableSelect) {
-        tableSelect.value = "1";
+        tableSelect.value = "Mesa 1";
     }
 
     // Modal de eliminar orden y variable de callback declarada correctamente
@@ -60,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const nombreMesaOption = option.textContent.trim().toLowerCase();
             const tienePedido = pedidosGuardados.some(
                 (pedido) =>
-                    String(pedido.mesa).trim().toLowerCase() ===
+                    normalizarMesa(pedido.mesa).toLowerCase() ===
                     nombreMesaOption,
             );
 
@@ -84,19 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const tienePedidosMesaActual = pedidosGuardados.some(
             (p) =>
                 String(p.mesa).trim().toLowerCase() ===
-                String(mesaActual).trim().toLowerCase(),
+                normalizarMesa(mesaActual).toLowerCase(),
         );
 
         if (!tienePedidosMesaActual && pedidosGuardados.length > 0) {
             const mesaConPedido = pedidosGuardados.find((p) => p.mesa);
             if (mesaConPedido) {
-                mesaActual = mesaConPedido.mesa;
+                mesaActual = normalizarMesa(mesaConPedido.mesa);
 
                 if (tableSelect) {
                     const optionMatch = Array.from(tableSelect.options).find(
                         (opt) =>
                             opt.textContent.trim().toLowerCase() ===
-                            mesaActual.trim().toLowerCase(),
+                            normalizarMesa(mesaActual).toLowerCase(),
                     );
                     if (optionMatch) {
                         tableSelect.value = optionMatch.value;
@@ -107,8 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const pedidosFiltrados = pedidosGuardados.filter(
             (pedido) =>
-                String(pedido.mesa).trim().toLowerCase() ===
-                String(mesaActual).trim().toLowerCase(),
+                normalizarMesa(pedido.mesa).toLowerCase() ===
+                normalizarMesa(mesaActual).toLowerCase(),
         );
 
         updateTableSelectStatus();
@@ -118,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (totalTableLabel) {
-            const numeroMesa = mesaActual.replace("Mesa ", "");
+            const numeroMesa = mesaActual;
             totalTableLabel.textContent = `Total de la Mesa (${numeroMesa})`;
         }
 
@@ -298,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const selectedOption =
                 tableSelect.options[tableSelect.selectedIndex];
             if (selectedOption) {
-                mesaActual = selectedOption.textContent.trim();
+                mesaActual = normalizarMesa(selectedOption.textContent);
                 renderOrders();
             }
         });
@@ -416,8 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const pedidoActual = pedidosGuardados.find((p) => p.id === orderId);
 
             if (pedidoActual) {
-                const mesaNum = pedidoActual.mesa.replace("Mesa ", "");
-                window.location.href = `/menu?mesa=${mesaNum}&usuario=${encodeURIComponent(pedidoActual.usuario)}&order_id=${pedidoActual.id}`;
+                const mesaNombre = normalizarMesa(pedidoActual.mesa);
+                window.location.href = `/menu?mesa=${encodeURIComponent(mesaNombre)}&usuario=${encodeURIComponent(pedidoActual.usuario)}&order_id=${pedidoActual.id}`;
             } else {
                 window.location.href = "/menu";
             }
@@ -427,10 +437,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // 5. Botón de agregar clientes
         const addClientBtn = e.target.closest(".btn-add-client");
         if (addClientBtn) {
-            const mesaNombre =
-                addClientBtn.getAttribute("data-mesa") || mesaActual;
-            const mesaNum = mesaNombre.replace("Mesa ", "");
-            window.location.href = `/menu?mesa=${mesaNum}&nuevo_cliente=true`;
+            const mesaNombre = normalizarMesa(
+                addClientBtn.getAttribute("data-mesa") || mesaActual,
+            );
+            window.location.href = `/menu?mesa=${encodeURIComponent(mesaNombre)}&nuevo_cliente=true`;
             return;
         }
 

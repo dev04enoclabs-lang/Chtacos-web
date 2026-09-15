@@ -15,11 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const customModal = document.getElementById("custom-modal");
     const modalMessage = document.getElementById("modal-message");
     const modalCloseBtn = document.getElementById("modal-close-btn");
+    let selectorPendiente = null;
 
     /**
-     * Muestra el modal personalizado con un mensaje específico 🌮
+     * Muestra el modal personalizado con un mensaje específico 
      */
-    function mostrarModal(mensaje) {
+    function mostrarModal(mensaje, selector = null) {
+        selectorPendiente = selector;
         if (customModal && modalMessage) {
             modalMessage.textContent = mensaje;
             customModal.classList.remove("hidden");
@@ -27,11 +29,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * Oculta el modal personalizado 🙈
+     * Oculta el modal personalizado 
      */
     function ocultarModal() {
         if (customModal) {
             customModal.classList.add("hidden");
+        }
+
+        if (selectorPendiente) {
+            selectorPendiente.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+            selectorPendiente.focus({ preventScroll: true });
+            selectorPendiente = null;
         }
     }
 
@@ -285,15 +296,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const prepValue = selectPreparacion ? selectPreparacion.value : "";
 
             if (!mesaValue) {
-                mostrarModal("Por favor selecciona una Mesa.");
+                mostrarModal("Por favor selecciona una Mesa/Llevar.", selectMesa);
                 return;
             }
             if (!usuarioValue) {
-                mostrarModal("Por favor selecciona un Usuario.");
+                mostrarModal("Por favor selecciona un Tipo Usuario.", selectUsuario);
                 return;
             }
             if (!prepValue) {
-                mostrarModal("Por favor selecciona la Preparación.");
+                mostrarModal(
+                    "Por favor selecciona el Tipo de Preparación.",
+                    selectPreparacion,
+                );
                 return;
             }
             if (cart.length === 0) {
@@ -311,10 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     (p) => String(p.id) === String(activeOrderId),
                 );
                 if (index !== -1) {
-                    ordersAdd[index].mesa = `Mesa ${mesaValue}`.replace(
-                        "Mesa Mesa ",
-                        "Mesa ",
-                    );
+                    ordersAdd[index].mesa = mesaValue;
                     ordersAdd[index].usuario = usuarioValue;
                     ordersAdd[index].preparacion = prepValue;
                     ordersAdd[index].productos = [...cart];
@@ -326,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 const newOrder = {
                     id: Date.now(),
-                    mesa: `Mesa ${mesaValue}`.replace("Mesa Mesa ", "Mesa "),
+                    mesa: mesaValue,
                     usuario: usuarioValue,
                     preparacion: prepValue,
                     productos: [...cart],

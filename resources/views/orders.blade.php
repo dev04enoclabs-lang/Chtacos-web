@@ -25,13 +25,13 @@
                     <select id="order-table-select"
                         class="w-full bg-surface-container-highest dark:bg-surface-variant pl-4 pr-10 py-2 rounded-full font-label-lg text-label-lg text-on-surface hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary border-none">
                         <option value="0" disabled selected hidden>Selecciona la mesa</option>
-                        <option value="1">Mesa 1</option>
-                        <option value="2">Mesa 2</option>
-                        <option value="3">Mesa 3</option>
-                        <option value="4">Mesa 4</option>
-                        <option value="5">Mesa 5</option>
-                        <option value="6">Llevar-1</option>
-                        <option value="7">Llevar-2</option>
+                        <option value="Mesa 1">Mesa 1</option>
+                        <option value="Mesa 2">Mesa 2</option>
+                        <option value="Mesa 3">Mesa 3</option>
+                        <option value="Mesa 4">Mesa 4</option>
+                        <option value="Mesa 5">Mesa 5</option>
+                        <option value="Llevar-1">Llevar-1</option>
+                        <option value="Llevar-2">Llevar-2</option>
                     </select>
                     <i
                         class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant"></i>
@@ -80,7 +80,8 @@
                 <i class="fas fa-trash-alt text-2xl"></i>
                 <h3 class="font-bold text-lg text-on-surface">Eliminar Orden</h3>
             </div>
-            <p id="delete-modal-text" class="text-on-surface-variant text-sm mb-6">¿Estás seguro de que deseas eliminar esta orden?</p>
+            <p id="delete-modal-text" class="text-on-surface-variant text-sm mb-6">¿Estás seguro de que deseas eliminar esta
+                orden?</p>
             <div class="flex justify-end gap-3">
                 <button id="btn-cancel-delete" type="button"
                     class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors">

@@ -90,15 +90,23 @@ document.addEventListener("DOMContentLoaded", () => {
         "input[name='tipo_pago']",
     );
 
+    const normalizarMesa = (mesa) => {
+        const mesaNormalizada = String(mesa || "").trim();
+        return {
+            "Mesa 6": "Llevar-1",
+            "Mesa 7": "Llevar-2",
+        }[mesaNormalizada] || mesaNormalizada;
+    };
+
     let mesaActual =
         selectMesaCart && selectMesaCart.value && selectMesaCart.value !== "0"
-            ? `Mesa ${selectMesaCart.value}`
+            ? selectMesaCart.options[selectMesaCart.selectedIndex].textContent.trim()
             : pedidosGuardados.length > 0
-              ? pedidosGuardados[0].mesa
+              ? normalizarMesa(pedidosGuardados[0].mesa)
               : "Mesa 1";
 
     if (selectMesaCart && mesaActual) {
-        selectMesaCart.value = mesaActual.replace("Mesa ", "");
+        selectMesaCart.value = mesaActual;
     }
     if (cartTableTitle) {
         cartTableTitle.innerText = mesaActual;
@@ -129,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const pedidosFiltrados = pedidosGuardados.filter(
             (pedido) =>
-                String(pedido.mesa).trim().toLowerCase() ===
+                normalizarMesa(pedido.mesa).toLowerCase() ===
                 String(mesaActual).trim().toLowerCase(),
         );
 
@@ -305,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const tienePedido = pedidosActuales.some(
                 (pedido) =>
-                    String(pedido.mesa).trim().toLowerCase() ===
+                    normalizarMesa(pedido.mesa).toLowerCase() ===
                     nombreMesaOption,
             );
 
@@ -356,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const pedidosFiltrados = pedidosGuardados.filter(
                 (pedido) =>
-                    String(pedido.mesa).trim().toLowerCase() ===
+                    normalizarMesa(pedido.mesa).toLowerCase() ===
                     String(mesaActual).trim().toLowerCase(),
             );
 
@@ -491,7 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (paymentType === "total") {
                     pedidosGuardados = pedidosGuardados.filter(
                         (pedido) =>
-                            String(pedido.mesa).trim().toLowerCase() !==
+                            normalizarMesa(pedido.mesa).toLowerCase() !==
                             String(mesaActual).trim().toLowerCase(),
                     );
                 } else {
@@ -532,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (selectMesaCart) {
         selectMesaCart.addEventListener("change", (e) => {
-            mesaActual = `Mesa ${e.target.value}`;
+            mesaActual = e.target.options[e.target.selectedIndex].textContent.trim();
             if (cartTableTitle) cartTableTitle.innerText = mesaActual;
             pedidosSeleccionadosIndividual.clear();
             renderCartSummary();
