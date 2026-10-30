@@ -35,7 +35,7 @@
     <main class="flex items-center justify-center min-h-[calc(100vh-140px)] px-4 py-10">
         <div class="w-full max-w-md bg-surface-container-low rounded-xl p-6 border border-outline-variant shadow-lg">
             <h2 class="text-headline-md font-bold text-on-surface text-center mb-2">Restablecer Contraseña</h2>
-            <p class="mb-6 text-center text-sm text-on-surface-variant">Ingresa el código que te enviamos por correo.
+            <p class="mb-6 text-center text-sm text-on-surface-variant">Ingresa el código que se te envio a tu correo.
             </p>
 
             @if ($errors->any())
