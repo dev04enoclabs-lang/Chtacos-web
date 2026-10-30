@@ -46,8 +46,8 @@
             </div>
 
             <div class="p-6 sm:p-8">
-                <p class="mb-6 text-center text-sm text-on-surface-variant">
-                    Ingresa tus credenciales que se te proporciono
+                <p class="mb-13 text-center text-lg md:text-xl text-on-surface-variant font-medium">
+                    Ingresa las credenciales proporcionadas por el administrador.
                 </p>
                 @if (session('error'))
                     <div
